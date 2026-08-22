@@ -1,7 +1,18 @@
-import type { Repository } from 'typeorm';
+import { QueryFailedError, type Repository } from 'typeorm';
+import { EmailAlreadyExistsError } from '../../application/errors/email-already-exists.error';
 import { User } from '../../domain/entities/user.entity';
 import type { UserRepository } from '../../domain/repositories/user.repository.interface';
 import { UserOrmEntity } from './user.orm-entity';
+
+const POSTGRES_UNIQUE_VIOLATION_CODE = '23505';
+
+function hasPostgresErrorCode(error: unknown, code: string): boolean {
+  if (typeof error !== 'object' || error === null || !('code' in error)) {
+    return false;
+  }
+
+  return (error as { code?: unknown }).code === code;
+}
 
 export class TypeOrmUserRepository implements UserRepository {
   constructor(private readonly repository: Repository<UserOrmEntity>) {}
@@ -17,8 +28,22 @@ export class TypeOrmUserRepository implements UserRepository {
   }
 
   async save(user: User): Promise<User> {
-    const savedEntity = await this.repository.save(this.toOrm(user));
-    return this.toDomain(savedEntity);
+    try {
+      const savedEntity = await this.repository.save(this.toOrm(user));
+      return this.toDomain(savedEntity);
+    } catch (error: unknown) {
+      if (
+        error instanceof QueryFailedError &&
+        hasPostgresErrorCode(
+          error.driverError,
+          POSTGRES_UNIQUE_VIOLATION_CODE,
+        )
+      ) {
+        throw new EmailAlreadyExistsError();
+      }
+
+      throw error;
+    }
   }
 
   private toDomain(entity: UserOrmEntity): User {
