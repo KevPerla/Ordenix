@@ -1,5 +1,7 @@
-import { ConfigService } from '@nestjs/config';
-import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { readFileSync } from 'node:fs';
+import type { ConfigService } from '@nestjs/config';
+import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import type { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 const DEFAULT_POSTGRES_PORT = 5432;
 
@@ -16,6 +18,29 @@ function isSynchronizationEnabled(value: string | undefined): boolean {
   return value?.trim().toLowerCase() === 'true';
 }
 
+function isSslEnabled(value: string | undefined): boolean {
+  return value?.trim().toLowerCase() === 'true';
+}
+
+function createSslConfig(
+  configService: ConfigService,
+): PostgresConnectionOptions['ssl'] {
+  if (!isSslEnabled(configService.get<string>('DB_SSL'))) {
+    return false;
+  }
+
+  const caPath = configService.get<string>('DB_SSL_CA_PATH')?.trim();
+
+  if (!caPath) {
+    return true;
+  }
+
+  return {
+    ca: readFileSync(caPath, 'utf8'),
+    rejectUnauthorized: true,
+  };
+}
+
 export function createDatabaseConfig(
   configService: ConfigService,
 ): TypeOrmModuleOptions {
@@ -29,6 +54,7 @@ export function createDatabaseConfig(
     synchronize: isSynchronizationEnabled(
       configService.get<string>('DB_SYNCHRONIZE'),
     ),
+    ssl: createSslConfig(configService),
     autoLoadEntities: true,
   };
 }
