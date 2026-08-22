@@ -9,4 +9,5 @@ export interface AuthTokenPayload {
 
 export interface TokenService {
   generate(payload: AuthTokenPayload): Promise<string>;
+  verify(token: string): Promise<AuthTokenPayload | null>;
 }

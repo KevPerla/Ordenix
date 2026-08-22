@@ -8,6 +8,7 @@ import {
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 import { AuthController } from './adapters/controllers/auth.controller';
+import { JwtAuthGuard } from './adapters/guards/jwt-auth.guard';
 import {
   ID_GENERATOR_TOKEN,
   type IdGenerator,
@@ -20,6 +21,7 @@ import {
   TOKEN_SERVICE_TOKEN,
   type TokenService,
 } from './application/ports/token-service.port';
+import { GetCurrentUserUseCase } from './application/use-cases/get-current-user.use-case';
 import { LoginUserUseCase } from './application/use-cases/login-user.use-case';
 import { RegisterUserUseCase } from './application/use-cases/register-user.use-case';
 import type { UserRepository } from './domain/repositories/user.repository.interface';
@@ -148,6 +150,13 @@ function createJwtConfig(configService: ConfigService): JwtModuleOptions {
         TOKEN_SERVICE_TOKEN,
       ],
     },
+    {
+      provide: GetCurrentUserUseCase,
+      useFactory: (userRepository: UserRepository): GetCurrentUserUseCase =>
+        new GetCurrentUserUseCase(userRepository),
+      inject: [USER_REPOSITORY_TOKEN],
+    },
+    JwtAuthGuard,
   ],
 })
 export class AuthModule {}
