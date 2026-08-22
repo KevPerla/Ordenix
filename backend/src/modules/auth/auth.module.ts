@@ -9,6 +9,7 @@ import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 import { AuthController } from './adapters/controllers/auth.controller';
 import { JwtAuthGuard } from './adapters/guards/jwt-auth.guard';
+import { RolesGuard } from './adapters/guards/roles.guard';
 import {
   ID_GENERATOR_TOKEN,
   type IdGenerator,
@@ -157,6 +158,8 @@ function createJwtConfig(configService: ConfigService): JwtModuleOptions {
       inject: [USER_REPOSITORY_TOKEN],
     },
     JwtAuthGuard,
+    RolesGuard,
   ],
+  exports: [JwtAuthGuard, RolesGuard],
 })
 export class AuthModule {}
