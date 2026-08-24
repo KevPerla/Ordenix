@@ -8,6 +8,7 @@
     "build": "nest build",
     "db:init": "ts-node scripts/inicializar-bd.script.ts",
     "seed:admin": "ts-node scripts/sembrar-admin.script.ts",
+    "seed:repartidor": "ts-node scripts/sembrar-repartidor.script.ts",
     "start": "nest start",
     "start:debug": "nest start --debug --watch",
     "start:dev": "nest start --watch",
