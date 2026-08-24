@@ -79,6 +79,7 @@ levanta el servidor:
 ```bash
 npm run db:init
 npm run seed:admin
+npm run seed:repartidor
 npm run start:dev
 ```
 
@@ -94,6 +95,7 @@ La API queda disponible en `http://localhost:3001`.
 | `DB_SSL`, `DB_SSL_CA_PATH` | TLS contra RDS y ruta al bundle de certificados. RDS exige `DB_SSL=true`; con la ruta vacia la conexion va cifrada pero sin validar el certificado |
 | `JWT_SECRET`, `JWT_EXPIRES_IN` | Firma y vigencia del token |
 | `ADMIN_*` | Datos del administrador inicial que crea el seed |
+| `REPARTIDOR_*` | Datos del repartidor inicial que crea el seed |
 
 ### Endpoints
 
@@ -141,6 +143,25 @@ sesión y al panel propio cuando el rol no corresponde.
   CLIENTE.
 - El arranque falla si `JWT_SECRET` no está definido.
 - Las credenciales se leen de variables de entorno y no se versionan.
+
+## Control de roles
+
+Cada cuenta tiene uno de tres roles y la sesion lo transporta de punta a punta:
+el token JWT lleva el rol firmado, `GET /auth/me` lo devuelve al recargar la
+pagina, y la barra de navegacion lo muestra junto al nombre de la persona.
+
+| Rol | Como se crea | Panel | Menu lateral |
+|---|---|---|---|
+| CLIENTE | Registro publico en `/registro` | `/cliente` | Inicio, Perfil |
+| ADMINISTRADOR | `npm run seed:admin` | `/empresa` | Dashboard, Usuarios |
+| REPARTIDOR | `npm run seed:repartidor` | `/repartidor` | Inicio, Pedidos |
+
+El rol no se acepta en el registro publico: toda cuenta creada desde el
+formulario nace como CLIENTE. Los otros dos roles se siembran por script, de
+modo que nadie puede elevarse a si mismo desde la interfaz.
+
+Quien intenta entrar a un panel que no le corresponde es devuelto al suyo, y el
+endpoint equivalente responde 403.
 
 ## Despliegue en AWS
 
@@ -200,6 +221,7 @@ patrón `main`, con estas casillas marcadas:
 | `npm run typecheck` | Verificación de tipos |
 | `npm run db:init` | Aplica `database/schema.sql` a la base |
 | `npm run seed:admin` | Crea el administrador inicial |
+| `npm run seed:repartidor` | Crea el repartidor inicial |
 
 ### Frontend
 
