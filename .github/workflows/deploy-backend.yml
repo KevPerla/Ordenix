@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: deploy-backend
+  group: despliegue-ec2
   cancel-in-progress: false
 
 jobs:
