@@ -1,7 +1,12 @@
-export default function PedidosEmpresaPage() {
+import EnConstruccion from "@/components/EnConstruccion";
+
+export default function EmpresaPedidosPage() {
   return (
-    <main>
-      <h1>Pedidos</h1>
-    </main>
+    <EnConstruccion
+      area="empresa"
+      titulo="Pedidos"
+      descripcion="Verás cada pedido entrante y podrás asignarle un repartidor."
+      volverA="/empresa"
+    />
   );
 }

@@ -1,7 +1,12 @@
-export default function PedidosPage() {
+import EnConstruccion from "@/components/EnConstruccion";
+
+export default function ClientePedidosPage() {
   return (
-    <main>
-      <h1>Mis pedidos</h1>
-    </main>
+    <EnConstruccion
+      area="cliente"
+      titulo="Mis pedidos"
+      descripcion="Tendrás el historial completo de tus pedidos con su estado y su total."
+      volverA="/cliente"
+    />
   );
 }

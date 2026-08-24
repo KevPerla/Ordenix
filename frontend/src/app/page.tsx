@@ -2,34 +2,26 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import { inicioDe } from "@/lib/rutas";
 
 export default function HomePage() {
   const router = useRouter();
+  const { usuario, cargandoSesion } = useAuth();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const rol = localStorage.getItem("rol");
-
-    if (!token) {
-      router.replace("/login");
+    if (cargandoSesion) {
       return;
     }
 
-    if (rol === "CLIENTE") {
-      router.replace("/cliente");
-    } else if (rol === "ADMINISTRADOR") {
-      router.replace("/empresa");
-    } else if (rol === "REPARTIDOR") {
-      router.replace("/repartidor");
-    } else {
-      router.replace("/login");
-    }
-  }, [router]);
+    router.replace(usuario ? inicioDe(usuario.rol) : "/login");
+  }, [cargandoSesion, usuario, router]);
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#08090d] text-white">
-      <p className="text-slate-400">
-        Cargando Ordenix...
+    <main className="flex min-h-screen flex-col items-center justify-center gap-4 px-6 text-[#172019]">
+      <span className="h-8 w-8 animate-spin rounded-full border-[3px] border-[#DCE8DE] border-t-[#16A34A]" />
+      <p className="text-[14px] font-medium text-[#718076]">
+        Abriendo Ordenix
       </p>
     </main>
   );

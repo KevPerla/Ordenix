@@ -1,7 +1,12 @@
-export default function PerfilPage() {
+import EnConstruccion from "@/components/EnConstruccion";
+
+export default function ClientePerfilPage() {
   return (
-    <main>
-      <h1>Perfil</h1>
-    </main>
+    <EnConstruccion
+      area="cliente"
+      titulo="Mi perfil"
+      descripcion="Desde aquí podrás editar tus datos y administrar tus direcciones de entrega."
+      volverA="/cliente"
+    />
   );
 }

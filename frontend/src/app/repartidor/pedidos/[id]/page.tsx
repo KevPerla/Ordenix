@@ -1,7 +1,12 @@
-export default function PedidoDetallePage() {
+import EnConstruccion from "@/components/EnConstruccion";
+
+export default function RepartidorPedidosPage() {
   return (
-    <main>
-      <h1>Detalle del pedido</h1>
-    </main>
+    <EnConstruccion
+      area="repartidor"
+      titulo="Detalle del pedido"
+      descripcion="Consultarás el detalle de la entrega y el monto a cobrar en efectivo."
+      volverA="/repartidor"
+    />
   );
 }

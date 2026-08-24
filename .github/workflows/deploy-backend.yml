@@ -1,0 +1,55 @@
+name: Desplegar backend en AWS
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'backend/**'
+      - 'database/**'
+      - '.github/workflows/deploy-backend.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-backend
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: EC2
+    runs-on: ubuntu-latest
+    environment: produccion
+    steps:
+      - name: Desplegar por SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script_stop: true
+          script: |
+            set -euo pipefail
+
+            cd ~/Ordenix
+            git fetch --all --prune
+            git checkout main
+            git reset --hard origin/main
+
+            cd backend
+            npm ci
+            npm run build
+
+            pm2 restart backend-posgrado --update-env || pm2 start dist/main.js --name backend-posgrado
+            pm2 save
+
+            for intento in $(seq 1 10); do
+              if curl -fsS "http://127.0.0.1:${PORT:-3001}/health" > /dev/null; then
+                echo "Backend saludable."
+                exit 0
+              fi
+              echo "Esperando al backend ($intento/10)..."
+              sleep 3
+            done
+
+            echo "El backend no respondio en /health tras el despliegue."
+            pm2 logs backend-posgrado --lines 40 --nostream
+            exit 1

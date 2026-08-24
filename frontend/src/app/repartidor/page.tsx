@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Sidebar from "@/components/Sidebar";
-import Navbar from "@/components/Navbar";
+import AccesoPorRol from "@/components/AccesoPorRol";
+import PanelShell from "@/components/PanelShell";
 import { useAuth } from "@/context/AuthContext";
 
 export default function RepartidorPage() {
@@ -10,16 +10,11 @@ export default function RepartidorPage() {
   const [busqueda, setBusqueda] = useState("");
 
   return (
-    <div className="min-h-screen bg-[#F4F8F4] text-[#172019]">
-      {/* SIDEBAR */}
-      <Sidebar role="repartidor" />
+    <PanelShell area="repartidor" titulo="Inicio">
 
-      {/* CONTENIDO */}
-      <div className="ml-[280px] min-h-screen">
-        {/* NAVBAR */}
-        <Navbar title="Inicio" />
-
-        <main className="p-6 lg:p-8">
+          <div className="mb-5">
+            <AccesoPorRol />
+          </div>
 
           {/* =========================
               BIENVENIDA
@@ -158,7 +153,7 @@ export default function RepartidorPage() {
           {/* =========================
               TARJETAS
           ========================== */}
-          <section className="mt-8 grid gap-5 md:grid-cols-3">
+          <section className="mt-8 grid gap-5 sm:grid-cols-2">
 
             {/* ROL */}
             <div
@@ -263,60 +258,6 @@ export default function RepartidorPage() {
                       shadow-[0_0_14px_rgba(34,197,94,0.7)]
                     "
                   />
-                </div>
-              </div>
-            </div>
-
-            {/* SESIÓN */}
-            <div
-              className="
-                group
-                rounded-2xl
-                border
-                border-[#DCE8DE]
-                bg-white
-                p-6
-                shadow-sm
-                shadow-green-900/[0.04]
-                transition-all
-                duration-200
-                hover:-translate-y-1
-                hover:shadow-md
-              "
-            >
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-sm font-medium text-[#718076]">
-                    Sesión
-                  </p>
-
-                  <p className="mt-3 text-xl font-bold text-[#15803D]">
-                    Activa
-                  </p>
-                </div>
-
-                <div
-                  className="
-                    flex
-                    h-11
-                    w-11
-                    items-center
-                    justify-center
-                    rounded-xl
-                    bg-[#DCFCE7]
-                    text-[#15803D]
-                  "
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                  >
-                    <path d="M20 6L9 17l-5-5" />
-                  </svg>
                 </div>
               </div>
             </div>
@@ -695,9 +636,6 @@ export default function RepartidorPage() {
               </div>
             </div>
           </section>
-
-        </main>
-      </div>
-    </div>
+    </PanelShell>
   );
 }

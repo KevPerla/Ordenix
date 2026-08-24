@@ -1,25 +1,18 @@
 "use client";
 
-import Sidebar from "@/components/Sidebar";
-import Navbar from "@/components/Navbar";
+import AccesoPorRol from "@/components/AccesoPorRol";
+import PanelShell from "@/components/PanelShell";
 import { useAuth } from "@/context/AuthContext";
 
 export default function EmpresaPage() {
   const { usuario } = useAuth();
 
   return (
-    <div className="min-h-screen bg-transparent text-[#172019]">
+    <PanelShell area="empresa" titulo="Dashboard">
 
-      {/* SIDEBAR */}
-      <Sidebar role="empresa" />
-
-      {/* CONTENIDO */}
-      <div className="ml-[280px] min-h-screen">
-
-        {/* NAVBAR */}
-        <Navbar title="Dashboard" />
-
-        <main className="p-6 lg:p-8">
+          <div className="mb-5">
+            <AccesoPorRol />
+          </div>
 
           {/* =====================================================
               BIENVENIDA
@@ -139,7 +132,7 @@ export default function EmpresaPage() {
               TARJETAS DE INFORMACIÓN
           ===================================================== */}
 
-          <section className="mt-8 grid gap-5 md:grid-cols-3">
+          <section className="mt-8 grid gap-5 sm:grid-cols-2">
 
             {/* ROL */}
 
@@ -261,71 +254,6 @@ export default function EmpresaPage() {
                     strokeWidth="1.8"
                   >
                     <path d="M20 6L9 17l-5-5" />
-                  </svg>
-
-                </div>
-
-              </div>
-
-            </div>
-
-
-            {/* AUTENTICACIÓN */}
-
-            <div
-              className="
-                group
-                rounded-2xl
-                border
-                border-[#DCE8DE]
-                bg-white
-                p-6
-                shadow-sm
-                shadow-green-900/[0.04]
-                transition-all
-                duration-200
-                hover:-translate-y-1
-                hover:shadow-md
-              "
-            >
-
-              <div className="flex items-start justify-between">
-
-                <div>
-
-                  <p className="text-sm font-medium text-[#718076]">
-                    Autenticación
-                  </p>
-
-                  <p className="mt-3 text-xl font-bold text-[#15803D]">
-                    JWT
-                  </p>
-
-                </div>
-
-                <div
-                  className="
-                    flex
-                    h-11
-                    w-11
-                    items-center
-                    justify-center
-                    rounded-xl
-                    bg-[#DCFCE7]
-                    text-[#15803D]
-                  "
-                >
-
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                  >
-                    <path d="M12 3l7 4v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V7l7-4Z" />
-                    <path d="M9 12l2 2 4-4" />
                   </svg>
 
                 </div>
@@ -606,10 +534,6 @@ export default function EmpresaPage() {
             </div>
 
           </section>
-
-        </main>
-
-      </div>
-    </div>
+    </PanelShell>
   );
 }

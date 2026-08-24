@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  Index,
+  PrimaryColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { UserRole } from '../../domain/enums/user-role.enum';
 
 @Entity({ name: 'users' })
@@ -18,15 +25,16 @@ export class UserOrmEntity {
   @Column({ name: 'password_hash', type: 'varchar', length: 255 })
   passwordHash!: string;
 
+  @Index()
   @Column({ type: 'enum', enum: UserRole, default: UserRole.CLIENTE })
   rol!: UserRole;
 
   @Column({ type: 'boolean', default: true })
   activo!: boolean;
 
-  @Column({ name: 'created_at', type: 'timestamptz' })
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt!: Date;
 
-  @Column({ name: 'updated_at', type: 'timestamptz' })
+  @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
   updatedAt!: Date;
 }

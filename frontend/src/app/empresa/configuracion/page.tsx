@@ -1,7 +1,12 @@
-export default function ConfiguracionPage() {
+import EnConstruccion from "@/components/EnConstruccion";
+
+export default function EmpresaConfiguracionPage() {
   return (
-    <main>
-      <h1>Configuración</h1>
-    </main>
+    <EnConstruccion
+      area="empresa"
+      titulo="Configuración"
+      descripcion="Ajustarás los datos del negocio, sus horarios y sus zonas de cobertura."
+      volverA="/empresa"
+    />
   );
 }

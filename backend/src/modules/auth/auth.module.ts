@@ -7,6 +7,7 @@ import {
 } from '@nestjs/jwt';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
+import { AreasController } from './adapters/controllers/areas.controller';
 import { AuthController } from './adapters/controllers/auth.controller';
 import { JwtAuthGuard } from './adapters/guards/jwt-auth.guard';
 import { RolesGuard } from './adapters/guards/roles.guard';
@@ -23,6 +24,7 @@ import {
   type TokenService,
 } from './application/ports/token-service.port';
 import { GetCurrentUserUseCase } from './application/use-cases/get-current-user.use-case';
+import { GetRoleScopeUseCase } from './application/use-cases/get-role-scope.use-case';
 import { LoginUserUseCase } from './application/use-cases/login-user.use-case';
 import { RegisterUserUseCase } from './application/use-cases/register-user.use-case';
 import type { UserRepository } from './domain/repositories/user.repository.interface';
@@ -101,7 +103,7 @@ function createJwtConfig(configService: ConfigService): JwtModuleOptions {
         createJwtConfig(configService),
     }),
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, AreasController],
   providers: [
     {
       provide: USER_REPOSITORY_TOKEN,
@@ -156,6 +158,10 @@ function createJwtConfig(configService: ConfigService): JwtModuleOptions {
       useFactory: (userRepository: UserRepository): GetCurrentUserUseCase =>
         new GetCurrentUserUseCase(userRepository),
       inject: [USER_REPOSITORY_TOKEN],
+    },
+    {
+      provide: GetRoleScopeUseCase,
+      useFactory: (): GetRoleScopeUseCase => new GetRoleScopeUseCase(),
     },
     JwtAuthGuard,
     RolesGuard,
