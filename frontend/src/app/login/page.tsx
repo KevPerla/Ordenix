@@ -1,18 +1,65 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import CampoAuth from "@/components/CampoAuth";
+import PanelMarca from "@/components/PanelMarca";
 import { useAuth } from "@/context/AuthContext";
+import { useAviso } from "@/context/AvisoContext";
 import { login } from "@/lib/api";
+import { inicioDe } from "@/lib/rutas";
+
+const ICONO_CORREO = (
+  <svg
+    width="19"
+    height="19"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <rect x="2.5" y="4.5" width="19" height="15" rx="3" />
+    <path d="m3 7.5 8.4 5.6a2 2 0 0 0 2.2 0L21 7.5" />
+  </svg>
+);
+
+const ICONO_CANDADO = (
+  <svg
+    width="19"
+    height="19"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <rect x="3.5" y="10.5" width="17" height="10.5" rx="2.5" />
+    <path d="M7.5 10.5V7a4.5 4.5 0 0 1 9 0v3.5" />
+    <circle cx="12" cy="15.7" r="1.2" />
+  </svg>
+);
 
 export default function LoginPage() {
   const router = useRouter();
-  const { iniciarSesion } = useAuth();
+  const { usuario, cargandoSesion, iniciarSesion } = useAuth();
+  const { mostrarAviso } = useAviso();
 
   const [correo, setCorreo] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
+
+  useEffect(() => {
+    if (!cargandoSesion && usuario) {
+      router.replace(inicioDe(usuario.rol));
+    }
+  }, [cargandoSesion, usuario, router]);
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -26,363 +73,153 @@ export default function LoginPage() {
       });
 
       iniciarSesion(user, accessToken);
-
-      if (user.rol === "CLIENTE") {
-        router.push("/cliente");
-      } else if (user.rol === "ADMINISTRADOR") {
-        router.push("/empresa");
-      } else if (user.rol === "REPARTIDOR") {
-        router.push("/repartidor");
-      } else {
-        router.push("/");
-      }
+      mostrarAviso(`Bienvenido, ${user.nombre.split(" ")[0]}`);
+      router.replace(inicioDe(user.rol));
     } catch (error: unknown) {
       setError(
         error instanceof Error
           ? error.message
           : "No se pudo iniciar sesión"
       );
-    } finally {
       setCargando(false);
     }
   };
 
   return (
-    <main
-      className="
-        relative
-        flex
-        min-h-screen
-        items-center
-        justify-center
-        overflow-hidden
-        bg-gradient-to-br
-        from-[#DFF5E3]
-        via-[#F4FAF5]
-        to-[#CDEED4]
-        px-4
-        py-10
-        text-[#172019]
-      "
-    >
-      {/* =========================================
-          DECORACIÓN DE FONDO
-      ========================================= */}
-
-      <div
-        className="
-          pointer-events-none
-          absolute
-          -left-32
-          -top-32
-          h-96
-          w-96
-          rounded-full
-          bg-[#22C55E]/15
-          blur-3xl
-        "
+    <div className="grid min-h-screen lg:grid-cols-[1.05fr_1fr]">
+      <PanelMarca
+        lema={
+          <>
+            Pide. Sigue.{" "}
+            <span className="text-[#4ADE80]">Recibe.</span>
+          </>
+        }
+        entrada="Sigue tu pedido en tiempo real, hasta que toca tu puerta."
       />
 
-      <div
-        className="
-          pointer-events-none
-          absolute
-          -bottom-32
-          -right-32
-          h-96
-          w-96
-          rounded-full
-          bg-[#16A34A]/15
-          blur-3xl
-        "
-      />
-
-      <div
-        className="
-          pointer-events-none
-          absolute
-          left-1/2
-          top-1/2
-          h-72
-          w-72
-          -translate-x-1/2
-          -translate-y-1/2
-          rounded-full
-          bg-white/50
-          blur-3xl
-        "
-      />
-
-      {/* =========================================
-          CONTENEDOR
-      ========================================= */}
-
-      <div className="relative w-full max-w-md">
-        {/* Logo / encabezado */}
-
-        <div className="mb-7 text-center">
-          <div
-            className="
-              mx-auto
-              mb-5
-              flex
-              h-16
-              w-16
-              items-center
-              justify-center
-              rounded-2xl
-              bg-gradient-to-br
-              from-[#16A34A]
-              to-[#15803D]
-              text-2xl
-              font-black
-              text-white
-              shadow-lg
-              shadow-green-700/20
-            "
-          >
-            O
-          </div>
-
-          <h1 className="text-3xl font-bold tracking-tight text-[#172019]">
-            Iniciar sesión
-          </h1>
-
-          <p className="mt-2 text-sm text-[#718076]">
-            Ingresa a tu cuenta de Ordenix
-          </p>
-        </div>
-
-        {/* =========================================
-            TARJETA DEL LOGIN
-        ========================================= */}
-
-        <div
-          className="
-            rounded-[28px]
-            border
-            border-[#DCE8DE]
-            bg-white/95
-            p-7
-            shadow-xl
-            shadow-green-900/[0.08]
-            backdrop-blur-sm
-            sm:p-8
-          "
-        >
-          {/* Indicador */}
-
-          <div className="mb-6 flex items-center gap-3">
-            <div className="h-2.5 w-2.5 rounded-full bg-[#22C55E] shadow-[0_0_12px_rgba(34,197,94,0.45)]" />
-
-            <span className="text-xs font-semibold uppercase tracking-wider text-[#15803D]">
-              Acceso seguro
+      <main className="flex min-h-screen items-center justify-center px-5 py-10 sm:px-8 lg:min-h-0 lg:py-14">
+        <div className="w-full max-w-[400px]">
+          <div className="mb-7 flex items-center gap-3 lg:hidden">
+            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#22C55E] to-[#15803D] text-lg font-black text-white shadow-lg shadow-green-900/20">
+              O
             </span>
+            <div>
+              <p className="text-[19px] font-black tracking-[-0.04em] text-[#172019]">
+                Ordenix
+              </p>
+              <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-[#15803D]">
+                Delivery platform
+              </p>
+            </div>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-5">
-            {/* CORREO */}
+          <div className="flex items-center gap-3.5">
+            <span className="hidden h-12 w-12 shrink-0 items-center justify-center rounded-[17px] bg-gradient-to-br from-[#22C55E] to-[#15803D] text-[22px] font-black tracking-[-0.08em] text-white shadow-lg shadow-green-900/20 lg:flex">
+              O
+            </span>
 
-            <div>
-              <label className="mb-2 block text-sm font-semibold text-[#172019]">
-                Correo electrónico
-              </label>
+            <h1 className="text-[30px] font-bold leading-[1.1] tracking-[-0.03em] text-[#172019] sm:text-[32px]">
+              Iniciar sesión
+            </h1>
+          </div>
 
-              <div className="relative">
-                <div
-                  className="
-                    pointer-events-none
-                    absolute
-                    left-4
-                    top-1/2
-                    flex
-                    -translate-y-1/2
-                    text-[#8A968E]
-                  "
-                >
-                  <svg
-                    width="19"
-                    height="19"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                  >
-                    <rect x="3" y="5" width="18" height="14" rx="2" />
-                    <path d="m3 7 9 6 9-6" />
-                  </svg>
-                </div>
+          <span className="mt-3.5 block h-[3px] w-11 rounded-full bg-gradient-to-r from-[#22C55E] to-[#15803D]" />
 
-                <input
-                  type="email"
-                  value={correo}
-                  onChange={(e) => setCorreo(e.target.value)}
-                  placeholder="correo@ejemplo.com"
-                  required
-                  className="
-                    h-12
-                    w-full
-                    rounded-xl
-                    border
-                    border-[#DCE8DE]
-                    bg-[#F7FAF7]
-                    pl-11
-                    pr-4
-                    text-sm
-                    text-[#172019]
-                    outline-none
-                    transition
-                    placeholder:text-[#9AA79F]
-                    focus:border-[#86EFAC]
-                    focus:bg-white
-                    focus:ring-4
-                    focus:ring-green-100
-                  "
-                />
-              </div>
-            </div>
-
-            {/* CONTRASEÑA */}
-
-            <div>
-              <label className="mb-2 block text-sm font-semibold text-[#172019]">
-                Contraseña
-              </label>
-
-              <div className="relative">
-                <div
-                  className="
-                    pointer-events-none
-                    absolute
-                    left-4
-                    top-1/2
-                    flex
-                    -translate-y-1/2
-                    text-[#8A968E]
-                  "
-                >
-                  <svg
-                    width="19"
-                    height="19"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                  >
-                    <rect x="5" y="10" width="14" height="10" rx="2" />
-                    <path d="M8 10V7a4 4 0 0 1 8 0v3" />
-                  </svg>
-                </div>
-
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  required
-                  className="
-                    h-12
-                    w-full
-                    rounded-xl
-                    border
-                    border-[#DCE8DE]
-                    bg-[#F7FAF7]
-                    pl-11
-                    pr-4
-                    text-sm
-                    text-[#172019]
-                    outline-none
-                    transition
-                    placeholder:text-[#9AA79F]
-                    focus:border-[#86EFAC]
-                    focus:bg-white
-                    focus:ring-4
-                    focus:ring-green-100
-                  "
-                />
-              </div>
-            </div>
-
-            {/* ERROR */}
-
+          <form onSubmit={handleLogin} className="mt-7 space-y-5" noValidate>
             {error && (
               <div
-                className="
-                  rounded-xl
-                  border
-                  border-red-200
-                  bg-red-50
-                  px-4
-                  py-3
-                  text-sm
-                  font-medium
-                  text-red-600
-                "
+                role="alert"
+                className="flex items-start gap-2.5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[14px] font-medium text-red-600"
               >
+                <svg
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.9"
+                  className="mt-[2px] shrink-0"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="12" r="9.2" />
+                  <path d="M12 7.6v5.1" />
+                  <circle cx="12" cy="16.3" r="0.9" fill="currentColor" stroke="none" />
+                </svg>
                 {error}
               </div>
             )}
 
-            {/* BOTÓN */}
+            <CampoAuth
+              nombre="correo"
+              etiqueta="Correo electrónico"
+              tipo="email"
+              inputMode="email"
+              valor={correo}
+              onChange={setCorreo}
+              icono={ICONO_CORREO}
+              placeholder="correo@ejemplo.com"
+              autoComplete="email"
+              deshabilitado={cargando}
+              autoFocus
+            />
+
+            <CampoAuth
+              nombre="password"
+              etiqueta="Contraseña"
+              tipo="password"
+              valor={password}
+              onChange={setPassword}
+              icono={ICONO_CANDADO}
+              placeholder="Tu contraseña"
+              autoComplete="current-password"
+              deshabilitado={cargando}
+            />
 
             <button
               type="submit"
               disabled={cargando}
-              className="
-                flex
-                h-12
-                w-full
-                items-center
-                justify-center
-                rounded-xl
-                bg-[#166534]
-                text-sm
-                font-bold
-                text-white
-                shadow-sm
-                shadow-green-900/10
-                transition
-                hover:bg-[#15803D]
-                hover:shadow-md
-                active:scale-[0.98]
-                disabled:cursor-not-allowed
-                disabled:opacity-50
-              "
+              aria-busy={cargando || undefined}
+              className="group flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#166534] text-[15px] font-bold text-white shadow-lg shadow-green-900/15 transition-all duration-150 hover:bg-[#15803D] active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {cargando ? "Iniciando sesión..." : "Iniciar sesión"}
+              {cargando ? (
+                <>
+                  <span className="h-[17px] w-[17px] animate-spin rounded-full border-2 border-white/35 border-t-white" />
+                  Entrando
+                </>
+              ) : (
+                <>
+                  Entrar
+                  <svg
+                    width="17"
+                    height="17"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="transition-transform duration-200 group-hover:translate-x-0.5"
+                    aria-hidden="true"
+                  >
+                    <path d="M4.5 12h15" />
+                    <path d="m13.5 6 6 6-6 6" />
+                  </svg>
+                </>
+              )}
             </button>
           </form>
 
-          {/* REGISTRO */}
-
-          <div className="mt-6 border-t border-[#E8EFE9] pt-6 text-center">
-            <p className="text-sm text-[#718076]">
-              ¿No tienes una cuenta?
-            </p>
-
-            <button
-              type="button"
-              onClick={() => router.push("/registro")}
-              className="
-                mt-2
-                text-sm
-                font-bold
-                text-[#15803D]
-                transition
-                hover:text-[#166534]
-              "
+          <p className="mt-7 border-t border-[#E8EFE9] pt-6 text-center text-[14.5px] text-[#718076]">
+            ¿Todavía no tienes cuenta?{" "}
+            <Link
+              href="/registro"
+              className="font-bold text-[#15803D] underline-offset-4 transition hover:text-[#166534] hover:underline"
             >
-              Regístrate
-            </button>
-          </div>
+              Crear una
+            </Link>
+          </p>
         </div>
-
-        {/* Texto inferior */}
-
-        <p className="mt-6 text-center text-xs text-[#718076]">
-          © 2026 Ordenix · Gestión de pedidos y entregas
-        </p>
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }

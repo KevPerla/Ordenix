@@ -1,25 +1,18 @@
 "use client";
 
-import Sidebar from "@/components/Sidebar";
-import Navbar from "@/components/Navbar";
+import AccesoPorRol from "@/components/AccesoPorRol";
+import PanelShell from "@/components/PanelShell";
 import { useAuth } from "@/context/AuthContext";
 
 export default function ClientePage() {
   const { usuario } = useAuth();
 
   return (
-    <div className="min-h-screen bg-transparent text-[#172019]">
+    <PanelShell area="cliente" titulo="Inicio">
 
-      {/* SIDEBAR */}
-      <Sidebar role="cliente" />
-
-      {/* CONTENIDO */}
-      <div className="ml-[280px] min-h-screen">
-
-        {/* NAVBAR */}
-        <Navbar title="Inicio" />
-
-        <main className="p-6 lg:p-8">
+          <div className="mb-5">
+            <AccesoPorRol />
+          </div>
 
           {/* =====================================================
               BIENVENIDA
@@ -140,7 +133,7 @@ export default function ClientePage() {
               TARJETAS DE INFORMACIÓN
           ===================================================== */}
 
-          <section className="mt-8 grid gap-5 md:grid-cols-3">
+          <section className="mt-8 grid gap-5 sm:grid-cols-2">
 
             {/* ESTADO DE CUENTA */}
 
@@ -253,55 +246,6 @@ export default function ClientePage() {
                     <circle cx="12" cy="8" r="4" />
                     <path d="M4 21c.8-4.1 3.5-6 8-6s7.2 1.9 8 6" />
                   </svg>
-                </div>
-
-              </div>
-            </div>
-
-
-            {/* SESIÓN */}
-
-            <div
-              className="
-                group
-                rounded-2xl
-                border
-                border-[#DCE8DE]
-                bg-white
-                p-6
-                shadow-sm
-                shadow-green-900/[0.04]
-                transition-all
-                duration-200
-                hover:-translate-y-1
-                hover:shadow-md
-              "
-            >
-              <div className="flex items-start justify-between">
-
-                <div>
-                  <p className="text-sm font-medium text-[#718076]">
-                    Sesión
-                  </p>
-
-                  <p className="mt-3 text-xl font-bold text-[#15803D]">
-                    Conectada
-                  </p>
-                </div>
-
-                <div
-                  className="
-                    flex
-                    h-11
-                    w-11
-                    items-center
-                    justify-center
-                    rounded-xl
-                    bg-[#DCFCE7]
-                    text-[#15803D]
-                  "
-                >
-                  <span className="h-3 w-3 rounded-full bg-[#22C55E] shadow-[0_0_10px_rgba(34,197,94,0.5)]" />
                 </div>
 
               </div>
@@ -571,9 +515,6 @@ export default function ClientePage() {
             </div>
 
           </section>
-
-        </main>
-      </div>
-    </div>
+    </PanelShell>
   );
 }

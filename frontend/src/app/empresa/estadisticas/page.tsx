@@ -1,7 +1,12 @@
-export default function EstadisticasPage() {
+import EnConstruccion from "@/components/EnConstruccion";
+
+export default function EmpresaEstadisticasPage() {
   return (
-    <main>
-      <h1>Estadísticas</h1>
-    </main>
+    <EnConstruccion
+      area="empresa"
+      titulo="Estadísticas"
+      descripcion="Analizarás la operación con métricas de pedidos, tiempos y productos más vendidos."
+      volverA="/empresa"
+    />
   );
 }

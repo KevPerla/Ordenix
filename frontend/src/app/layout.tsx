@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
+import { AvisoProvider } from "@/context/AvisoContext";
 
 export const metadata: Metadata = {
   title: "Ordenix",
@@ -15,9 +16,11 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body>
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        <AvisoProvider>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </AvisoProvider>
       </body>
     </html>
   );

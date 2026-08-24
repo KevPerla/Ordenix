@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 
 type SidebarProps = {
   role?: "cliente" | "empresa" | "repartidor";
+  abierto?: boolean;
+  onCerrar?: () => void;
 };
 
 /* ============================================================
@@ -138,40 +140,17 @@ const menus = {
 };
 
 /* ============================================================
-   INFORMACIÓN DEL USUARIO
-============================================================ */
-
-const userInfo = {
-  cliente: {
-    initials: "MM",
-    name: "Cliente",
-    role: "Cliente",
-  },
-
-  empresa: {
-    initials: "AD",
-    name: "Administrador",
-    role: "Administrador",
-  },
-
-  repartidor: {
-    initials: "CH",
-    name: "Carlos Hernández",
-    role: "Repartidor",
-  },
-};
-
-/* ============================================================
    SIDEBAR
 ============================================================ */
 
 export default function Sidebar({
   role = "cliente",
+  abierto = false,
+  onCerrar,
 }: SidebarProps) {
   const pathname = usePathname();
 
   const items = menus[role];
-  const user = userInfo[role];
 
   /* ==========================================================
      HOME
@@ -185,17 +164,29 @@ export default function Sidebar({
         : "/repartidor";
 
   return (
+    <>
+      {abierto && (
+        <div
+          onClick={onCerrar}
+          aria-hidden="true"
+          className="fixed inset-0 z-40 bg-[#0E2417]/50 backdrop-blur-sm lg:hidden"
+        />
+      )}
+
     <aside
-      className="
-        fixed inset-y-0 left-0 z-40
-        flex w-[280px] flex-col
-        overflow-hidden
+      className={`
+        fixed inset-y-0 left-0 z-50
+        flex w-[280px] max-w-[85vw] flex-col
+        overflow-y-auto overflow-x-hidden
         border-r border-[#DFE9E0]
         bg-gradient-to-b
         from-[#EDF7EF]
         via-[#F6FAF6]
         to-white
-      "
+        transition-transform duration-300 ease-out
+        lg:translate-x-0
+        ${abierto ? "translate-x-0" : "-translate-x-full"}
+      `}
     >
       {/* ======================================================
           DECORACIONES
@@ -236,6 +227,7 @@ export default function Sidebar({
       <div className="relative px-7 pb-7 pt-8">
         <Link
           href={homeHref}
+          onClick={onCerrar}
           className="group flex items-center gap-3.5"
         >
           {/* Logo */}
@@ -333,120 +325,6 @@ export default function Sidebar({
       </div>
 
       {/* ======================================================
-          TARJETA DEL USUARIO
-      ====================================================== */}
-
-      <div className="relative px-5">
-        <div
-          className="
-            relative
-            overflow-hidden
-            rounded-[22px]
-            border
-            border-[#DCE8DE]
-            bg-gradient-to-br
-            from-[#E6F5E8]
-            via-[#F0F8F1]
-            to-white
-            p-4
-            shadow-sm
-            shadow-green-900/[0.05]
-          "
-        >
-          {/* Decoración */}
-
-          <div
-            className="
-              absolute
-              -right-8
-              -top-8
-              h-24
-              w-24
-              rounded-full
-              bg-green-300/15
-              blur-sm
-            "
-          />
-
-          <div
-            className="
-              absolute
-              right-3
-              top-3
-              h-1.5
-              w-1.5
-              rounded-full
-              bg-[#22C55E]
-              shadow-sm
-              shadow-green-500/40
-            "
-          />
-
-          <div className="relative flex items-center gap-3">
-            {/* Avatar */}
-
-            <div
-              className="
-                relative
-                flex
-                h-11
-                w-11
-                shrink-0
-                items-center
-                justify-center
-                rounded-[15px]
-                bg-[#166534]
-                text-[11px]
-                font-bold
-                text-white
-                shadow-md
-                shadow-green-900/10
-              "
-            >
-              {user.initials}
-
-              <span
-                className="
-                  absolute
-                  -bottom-1
-                  -right-1
-                  h-3.5
-                  w-3.5
-                  rounded-full
-                  border-[3px]
-                  border-[#F0F8F1]
-                  bg-[#22C55E]
-                "
-              />
-            </div>
-
-            {/* Información */}
-
-            <div className="min-w-0">
-              <p
-                className="
-                  truncate
-                  text-[13px]
-                  font-bold
-                  text-[#172019]
-                "
-              >
-                {user.name}
-              </p>
-
-              <div className="mt-1 flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#22C55E]" />
-
-                <p className="text-[10px] font-medium text-[#718076]">
-                  {user.role}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ======================================================
           MENÚ
       ====================================================== */}
 
@@ -480,6 +358,7 @@ export default function Sidebar({
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={onCerrar}
                 className={`
                   group
                   relative
@@ -591,61 +470,7 @@ export default function Sidebar({
         </div>
       </nav>
 
-      {/* ======================================================
-          PARTE INFERIOR
-      ====================================================== */}
-
-      <div className="relative px-5 pb-5">
-
-        {/* ====================================================
-            ESTADO DEL SISTEMA
-        ==================================================== */}
-
-        <div
-          className="
-            mb-3
-            rounded-2xl
-            border
-            border-[#D9E9DC]
-            bg-gradient-to-br
-            from-[#E8F6EA]
-            to-[#F1F9F2]
-            px-4
-            py-3
-            shadow-sm
-            shadow-green-900/[0.03]
-          "
-        >
-          <div className="flex items-center gap-2">
-            <span
-              className="
-                h-2
-                w-2
-                rounded-full
-                bg-[#22C55E]
-                shadow-sm
-                shadow-green-500/50
-              "
-            />
-
-            <span className="text-[11px] font-bold text-[#15803D]">
-              Sistema operativo
-            </span>
-          </div>
-
-          <p
-            className="
-              mt-1
-              pl-4
-              text-[10px]
-              text-[#15803D]/60
-            "
-          >
-            Todos los servicios funcionan correctamente
-          </p>
-        </div>
-
-      </div>
     </aside>
+    </>
   );
 }

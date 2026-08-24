@@ -1,7 +1,12 @@
-export default function EntregaDetallePage() {
+import EnConstruccion from "@/components/EnConstruccion";
+
+export default function RepartidorEntregaPage() {
   return (
-    <main>
-      <h1>Detalle de entrega</h1>
-    </main>
+    <EnConstruccion
+      area="repartidor"
+      titulo="Detalle de entrega"
+      descripcion="Verás la ruta, el cliente y el efectivo a recibir en esta entrega."
+      volverA="/repartidor"
+    />
   );
 }

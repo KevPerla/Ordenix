@@ -1,7 +1,12 @@
-export default function UsuariosPage() {
+import EnConstruccion from "@/components/EnConstruccion";
+
+export default function EmpresaUsuariosPage() {
   return (
-    <main>
-      <h1>Usuarios</h1>
-    </main>
+    <EnConstruccion
+      area="empresa"
+      titulo="Usuarios"
+      descripcion="Administrarás las cuentas del sistema y el rol asignado a cada persona."
+      volverA="/empresa"
+    />
   );
 }

@@ -1,7 +1,12 @@
-export default function RepartidoresPage() {
+import EnConstruccion from "@/components/EnConstruccion";
+
+export default function EmpresaRepartidoresPage() {
   return (
-    <main>
-      <h1>Repartidores</h1>
-    </main>
+    <EnConstruccion
+      area="empresa"
+      titulo="Repartidores"
+      descripcion="Administrarás a tu equipo de reparto y su disponibilidad por zona."
+      volverA="/empresa"
+    />
   );
 }

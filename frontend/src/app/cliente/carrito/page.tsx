@@ -1,7 +1,12 @@
-export default function CarritoPage() {
+import EnConstruccion from "@/components/EnConstruccion";
+
+export default function ClienteCarritoPage() {
   return (
-    <main>
-      <h1>Carrito</h1>
-    </main>
+    <EnConstruccion
+      area="cliente"
+      titulo="Carrito"
+      descripcion="Reunirás aquí lo que quieras pedir antes de confirmar la orden."
+      volverA="/cliente"
+    />
   );
 }

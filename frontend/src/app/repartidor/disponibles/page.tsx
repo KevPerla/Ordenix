@@ -1,7 +1,12 @@
-export default function DisponiblesPage() {
+import EnConstruccion from "@/components/EnConstruccion";
+
+export default function RepartidorDisponiblesPage() {
   return (
-    <main>
-      <h1>Pedidos disponibles</h1>
-    </main>
+    <EnConstruccion
+      area="repartidor"
+      titulo="Pedidos disponibles"
+      descripcion="Aparecerán los pedidos listos para despacho que puedas tomar."
+      volverA="/repartidor"
+    />
   );
 }

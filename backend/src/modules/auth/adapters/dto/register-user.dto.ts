@@ -7,23 +7,23 @@ import {
 } from 'class-validator';
 
 export class RegisterUserDto {
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(150)
+  @MaxLength(150, { message: 'El nombre no puede superar los 150 caracteres.' })
+  @IsString({ message: 'El nombre no es válido.' })
+  @IsNotEmpty({ message: 'Escribe tu nombre completo.' })
   nombreCompleto!: string;
 
-  @IsEmail()
-  @IsNotEmpty()
-  @MaxLength(255)
+  @MaxLength(255, { message: 'El correo no puede superar los 255 caracteres.' })
+  @IsEmail({}, { message: 'El correo no tiene un formato válido.' })
+  @IsNotEmpty({ message: 'Escribe tu correo.' })
   correo!: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(30)
+  @MaxLength(30, { message: 'El teléfono no puede superar los 30 caracteres.' })
+  @IsString({ message: 'El teléfono no es válido.' })
+  @IsNotEmpty({ message: 'Escribe tu teléfono.' })
   telefono!: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(8)
+  @MinLength(8, { message: 'La contraseña debe tener al menos 8 caracteres.' })
+  @IsString({ message: 'La contraseña no es válida.' })
+  @IsNotEmpty({ message: 'Crea una contraseña.' })
   password!: string;
 }

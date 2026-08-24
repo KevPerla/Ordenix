@@ -1,7 +1,12 @@
-export default function EmpresasPage() {
+import EnConstruccion from "@/components/EnConstruccion";
+
+export default function ClienteEmpresasPage() {
   return (
-    <main>
-      <h1>Empresas</h1>
-    </main>
+    <EnConstruccion
+      area="cliente"
+      titulo="Comercios"
+      descripcion="Listaremos los comercios disponibles cerca de tu dirección registrada."
+      volverA="/cliente"
+    />
   );
 }

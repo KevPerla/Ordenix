@@ -1,7 +1,12 @@
-export default function ConfirmarPedidoPage() {
+import EnConstruccion from "@/components/EnConstruccion";
+
+export default function ClienteConfirmarPedidoPage() {
   return (
-    <main>
-      <h1>Confirmar pedido</h1>
-    </main>
+    <EnConstruccion
+      area="cliente"
+      titulo="Confirmar pedido"
+      descripcion="Revisarás la dirección, el método de pago y el total antes de enviar la orden."
+      volverA="/cliente"
+    />
   );
 }

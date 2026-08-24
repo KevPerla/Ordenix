@@ -1,7 +1,12 @@
-export default function MenuPage() {
+import EnConstruccion from "@/components/EnConstruccion";
+
+export default function ClienteMenuPage() {
   return (
-    <main>
-      <h1>Menú</h1>
-    </main>
+    <EnConstruccion
+      area="cliente"
+      titulo="Menú"
+      descripcion="Aquí verás el catálogo con las categorías, los precios y la disponibilidad de cada platillo."
+      volverA="/cliente"
+    />
   );
 }

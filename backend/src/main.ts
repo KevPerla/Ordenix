@@ -15,28 +15,34 @@ function parsePort(value: string | undefined): number {
   return port;
 }
 
-function getFrontendOrigin(value: string | undefined): string {
-  return value?.trim() || DEFAULT_FRONTEND_ORIGIN;
+function getFrontendOrigins(value: string | undefined): string[] {
+  const origins = (value ?? '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter((origin) => origin.length > 0);
+
+  return origins.length > 0 ? origins : [DEFAULT_FRONTEND_ORIGIN];
 }
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
   const port = parsePort(process.env.PORT);
-  const frontendOrigin = getFrontendOrigin(process.env.FRONTEND_ORIGIN);
+  const frontendOrigins = getFrontendOrigins(process.env.FRONTEND_ORIGIN);
 
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
+      stopAtFirstError: true,
     }),
   );
 
   app.enableCors({
-    origin: frontendOrigin,
+    origin: frontendOrigins,
   });
 
-  await app.listen(port);
+  await app.listen(port, '0.0.0.0');
 }
 
 void bootstrap();

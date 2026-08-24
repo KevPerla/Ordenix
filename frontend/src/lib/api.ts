@@ -88,6 +88,27 @@ function getBackendMessage(
   return fallback;
 }
 
+export interface AreaResponse {
+  rol: Rol;
+  area: string;
+  lema: string;
+  permisos: string[];
+}
+
+function getAccessToken(): string {
+  if (typeof window === "undefined") {
+    throw new ApiError("No autorizado", 401);
+  }
+
+  const accessToken = window.localStorage.getItem(ACCESS_TOKEN_KEY);
+
+  if (!accessToken) {
+    throw new ApiError("No autorizado", 401);
+  }
+
+  return accessToken;
+}
+
 async function request<T>(
   endpoint: string,
   options: RequestInit = {}
@@ -148,27 +169,26 @@ export async function login(
 }
 
 export async function getMe(): Promise<Usuario> {
-  if (typeof window === "undefined") {
-    throw new ApiError("No autorizado", 401);
-  }
-
-  const accessToken = window.localStorage.getItem(
-    ACCESS_TOKEN_KEY
-  );
-
-  if (!accessToken) {
-    throw new ApiError("No autorizado", 401);
-  }
-
   const response = await request<BackendMeResponse>(
     "/auth/me",
     {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${getAccessToken()}`,
       },
     }
   );
 
   return normalizeUsuario(response);
+}
+
+export async function getArea(
+  endpoint: string
+): Promise<AreaResponse> {
+  return request<AreaResponse>(endpoint, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${getAccessToken()}`,
+    },
+  });
 }

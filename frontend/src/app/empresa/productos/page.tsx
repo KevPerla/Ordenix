@@ -1,7 +1,12 @@
-export default function ProductosPage() {
+import EnConstruccion from "@/components/EnConstruccion";
+
+export default function EmpresaProductosPage() {
   return (
-    <main>
-      <h1>Productos</h1>
-    </main>
+    <EnConstruccion
+      area="empresa"
+      titulo="Productos"
+      descripcion="Gestionarás el catálogo completo con precios, existencias y disponibilidad."
+      volverA="/empresa"
+    />
   );
 }

@@ -1,7 +1,12 @@
-export default function GananciasPage() {
+import EnConstruccion from "@/components/EnConstruccion";
+
+export default function RepartidorGananciasPage() {
   return (
-    <main>
-      <h1>Ganancias</h1>
-    </main>
+    <EnConstruccion
+      area="repartidor"
+      titulo="Mis ganancias"
+      descripcion="Consultarás lo que has ganado y el efectivo que debes liquidar."
+      volverA="/repartidor"
+    />
   );
 }

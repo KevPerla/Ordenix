@@ -1,7 +1,12 @@
-export default function PedidosRepartidorPage() {
+import EnConstruccion from "@/components/EnConstruccion";
+
+export default function RepartidorPedidosPage() {
   return (
-    <main>
-      <h1>Pedidos</h1>
-    </main>
+    <EnConstruccion
+      area="repartidor"
+      titulo="Mis pedidos"
+      descripcion="Verás los pedidos que tienes asignados y su dirección de entrega."
+      volverA="/repartidor"
+    />
   );
 }
