@@ -14,10 +14,6 @@ function parsePostgresPort(value: string | undefined): number {
   return Number.isNaN(port) ? DEFAULT_POSTGRES_PORT : port;
 }
 
-function isSynchronizationEnabled(value: string | undefined): boolean {
-  return value?.trim().toLowerCase() === 'true';
-}
-
 function isSslEnabled(value: string | undefined): boolean {
   return value?.trim().toLowerCase() === 'true';
 }
@@ -51,9 +47,7 @@ export function createDatabaseConfig(
     username: configService.get<string>('DB_USER'),
     password: configService.get<string>('DB_PASSWORD'),
     database: configService.get<string>('DB_NAME'),
-    synchronize: isSynchronizationEnabled(
-      configService.get<string>('DB_SYNCHRONIZE'),
-    ),
+    synchronize: false,
     ssl: createSslConfig(configService),
     autoLoadEntities: true,
   };
