@@ -27,8 +27,8 @@ function createSslConfig(
 
   const caPath = configService.get<string>('DB_SSL_CA_PATH')?.trim();
 
-  if (!caPath) {
-    return true;
+    if (!caPath) {
+    return { rejectUnauthorized: false };
   }
 
   return {
