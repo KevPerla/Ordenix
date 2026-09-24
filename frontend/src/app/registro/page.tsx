@@ -189,7 +189,7 @@ function Fuerza({ valor }: { valor: string }) {
   if (!valor) return null;
 
   const nivel = calcularFuerza(valor);
-  const colores = ["bg-red-500", "bg-amber-500", "bg-lime-500", "bg-[#16A34A]"];
+  const colores = ["bg-red-500", "bg-amber-500", "bg-accent-500", "bg-[#2563EB]"];
 
   return (
     <div className="mt-2.5">
@@ -198,17 +198,17 @@ function Fuerza({ valor }: { valor: string }) {
           <span
             key={n}
             className={`h-1 rounded-full transition-colors duration-200 ${
-              n <= nivel ? colores[nivel - 1] : "bg-[#E4EDE6]"
+              n <= nivel ? colores[nivel - 1] : "bg-[#E2E8F0]"
             }`}
           />
         ))}
       </div>
       <p
         aria-live="polite"
-        className="mt-1.5 flex justify-between text-[12px] text-[#718076]"
+        className="mt-1.5 flex justify-between text-[12px] text-[#64748B]"
       >
         <span>Seguridad de la contraseña</span>
-        <span className="font-semibold text-[#172019]">
+        <span className="font-semibold text-[#0F172A]">
           {NIVELES[nivel - 1]}
         </span>
       </p>
@@ -226,14 +226,14 @@ function Requisitos({ valor }: { valor: string }) {
           <li
             key={requisito.texto}
             className={`flex items-center gap-2 text-[12.5px] transition-colors ${
-              cumplido ? "text-[#15803D]" : "text-[#8A968E]"
+              cumplido ? "text-[#1D4ED8]" : "text-[#94A3B8]"
             }`}
           >
             <span
               className={`grid h-[15px] w-[15px] shrink-0 place-items-center rounded-full border transition-colors ${
                 cumplido
-                  ? "border-[#22C55E] bg-[#22C55E] text-white"
-                  : "border-[#D3E0D6]"
+                  ? "border-[#3B82F6] bg-[#3B82F6] text-white"
+                  : "border-[#CBD5E1]"
               }`}
             >
               {cumplido && (
@@ -258,7 +258,7 @@ function Requisitos({ valor }: { valor: string }) {
             </span>
 
             {!requisito.obligatorio && (
-              <span className="ml-auto text-[10.5px] uppercase tracking-[0.06em] text-[#A8B4AC]">
+              <span className="ml-auto text-[10.5px] uppercase tracking-[0.06em] text-[#94A3B8]">
                 Recomendado
               </span>
             )}
@@ -349,7 +349,7 @@ export default function RegistroPage() {
         lema={
           <>
             Pedir empieza{" "}
-            <span className="text-[#4ADE80]">aquí.</span>
+            <span className="text-[#FB923C]">aquí.</span>
           </>
         }
         entrada="Abre tu cuenta y pide sin tarjeta. Pagas en efectivo cuando el repartidor llega."
@@ -358,29 +358,29 @@ export default function RegistroPage() {
       <main className="flex items-center justify-center px-5 py-10 sm:px-8 lg:py-14">
         <div className="w-full max-w-[400px]">
           <div className="mb-7 flex items-center gap-3 lg:hidden">
-            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#22C55E] to-[#15803D] text-lg font-black text-white shadow-lg shadow-green-900/20">
+            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#3B82F6] to-[#1D4ED8] text-lg font-black text-white shadow-lg shadow-ink-900/20">
               O
             </span>
             <div>
-              <p className="text-[19px] font-black tracking-[-0.04em] text-[#172019]">
+              <p className="text-[19px] font-black tracking-[-0.04em] text-[#0F172A]">
                 Ordenix
               </p>
-              <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-[#15803D]">
+              <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-[#1D4ED8]">
                 Delivery platform
               </p>
             </div>
           </div>
 
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#DCFCE7] bg-[#F0FDF4] py-1.5 pl-2.5 pr-3.5 text-[12px] font-semibold text-[#15803D]">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#22C55E] shadow-[0_0_10px_rgba(34,197,94,0.6)]" />
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#DBEAFE] bg-[#EFF6FF] py-1.5 pl-2.5 pr-3.5 text-[12px] font-semibold text-[#1D4ED8]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#3B82F6] shadow-[0_0_10px_rgba(37, 99, 235,0.6)]" />
             Cuenta nueva
           </span>
 
-          <h1 className="mt-4 text-[32px] font-bold leading-[1.1] tracking-[-0.03em] text-[#172019]">
+          <h1 className="mt-4 text-[32px] font-bold leading-[1.1] tracking-[-0.03em] text-[#0F172A]">
             Crear cuenta
           </h1>
 
-          <p className="mt-2.5 text-[15px] leading-relaxed text-[#718076]">
+          <p className="mt-2.5 text-[15px] leading-relaxed text-[#64748B]">
             Toma menos de un minuto. Tu cuenta se crea como cliente.
           </p>
 
@@ -487,7 +487,7 @@ export default function RegistroPage() {
               type="submit"
               disabled={cargando}
               aria-busy={cargando || undefined}
-              className="group flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#166534] text-[15px] font-bold text-white shadow-lg shadow-green-900/15 transition-all duration-150 hover:bg-[#15803D] active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-60"
+              className="group flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#1E40AF] text-[15px] font-bold text-white shadow-lg shadow-ink-900/15 transition-all duration-150 hover:bg-[#1D4ED8] active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {cargando ? (
                 <>
@@ -517,11 +517,11 @@ export default function RegistroPage() {
             </button>
           </form>
 
-          <p className="mt-7 border-t border-[#E8EFE9] pt-6 text-center text-[14.5px] text-[#718076]">
+          <p className="mt-7 border-t border-[#EEF2F7] pt-6 text-center text-[14.5px] text-[#64748B]">
             ¿Ya tienes cuenta?{" "}
             <Link
               href="/login"
-              className="font-bold text-[#15803D] underline-offset-4 transition hover:text-[#166534] hover:underline"
+              className="font-bold text-[#1D4ED8] underline-offset-4 transition hover:text-[#1E40AF] hover:underline"
             >
               Entrar
             </Link>

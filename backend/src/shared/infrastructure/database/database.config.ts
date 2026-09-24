@@ -6,6 +6,7 @@ import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import type { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 const DEFAULT_POSTGRES_PORT = 5432;
+const ZONA_HORARIA = 'America/El_Salvador';
 const BACKEND_ROOT = resolve(__dirname, '..', '..', '..', '..');
 const logger = new Logger('DatabaseConfig');
 
@@ -73,5 +74,8 @@ export function createDatabaseConfig(
     synchronize: false,
     ssl: createSslConfig(configService),
     autoLoadEntities: true,
+    extra: {
+      options: `-c timezone=${ZONA_HORARIA}`,
+    },
   };
 }

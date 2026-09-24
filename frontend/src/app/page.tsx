@@ -18,9 +18,9 @@ export default function HomePage() {
   }, [cargandoSesion, usuario, router]);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-4 px-6 text-[#172019]">
-      <span className="h-8 w-8 animate-spin rounded-full border-[3px] border-[#DCE8DE] border-t-[#16A34A]" />
-      <p className="text-[14px] font-medium text-[#718076]">
+    <main className="flex min-h-screen flex-col items-center justify-center gap-4 px-6 text-[#0F172A]">
+      <span className="h-8 w-8 animate-spin rounded-full border-[3px] border-[#E2E8F0] border-t-[#2563EB]" />
+      <p className="text-[14px] font-medium text-[#64748B]">
         Abriendo Ordenix
       </p>
     </main>

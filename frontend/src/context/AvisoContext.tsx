@@ -89,17 +89,17 @@ export function AvisoProvider({ children }: { children: ReactNode }) {
           <div
             key={aviso.id}
             role="status"
-            className="aviso-entra flex max-w-[92vw] items-center gap-2.5 rounded-full border border-[#DCE8DE] bg-white/95 py-2.5 pl-2.5 pr-4 shadow-lg shadow-green-900/10 backdrop-blur-md"
+            className="aviso-entra flex max-w-[92vw] items-center gap-2.5 rounded-full border border-[#E2E8F0] bg-white/95 py-2.5 pl-2.5 pr-4 shadow-lg shadow-ink-900/10 backdrop-blur-md"
           >
             <span
               className={`grid h-[22px] w-[22px] shrink-0 place-items-center rounded-full text-white ${
-                aviso.tipo === "exito" ? "bg-[#22C55E]" : "bg-[#DC2626]"
+                aviso.tipo === "exito" ? "bg-[#3B82F6]" : "bg-[#DC2626]"
               }`}
             >
               {aviso.tipo === "exito" ? ICONO_EXITO : ICONO_ERROR}
             </span>
 
-            <p className="text-[13.5px] font-semibold text-[#172019]">
+            <p className="text-[13.5px] font-semibold text-[#0F172A]">
               {aviso.mensaje}
             </p>
           </div>

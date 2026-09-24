@@ -169,7 +169,7 @@ export default function Sidebar({
         <div
           onClick={onCerrar}
           aria-hidden="true"
-          className="fixed inset-0 z-40 bg-[#0E2417]/50 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-[#0B1220]/50 backdrop-blur-sm lg:hidden"
         />
       )}
 
@@ -178,10 +178,10 @@ export default function Sidebar({
         fixed inset-y-0 left-0 z-50
         flex w-[280px] max-w-[85vw] flex-col
         overflow-y-auto overflow-x-hidden
-        border-r border-[#DFE9E0]
+        border-r border-[#E2E8F0]
         bg-gradient-to-b
-        from-[#EDF7EF]
-        via-[#F6FAF6]
+        from-[#EEF2F7]
+        via-[#F6F8FC]
         to-white
         transition-transform duration-300 ease-out
         lg:translate-x-0
@@ -201,7 +201,7 @@ export default function Sidebar({
           h-[280px]
           w-[280px]
           rounded-full
-          bg-green-400/10
+          bg-brand-400/10
           blur-3xl
         "
       />
@@ -215,7 +215,7 @@ export default function Sidebar({
           h-[220px]
           w-[220px]
           rounded-full
-          bg-green-300/10
+          bg-brand-300/10
           blur-3xl
         "
       />
@@ -242,9 +242,9 @@ export default function Sidebar({
               justify-center
               overflow-hidden
               rounded-[17px]
-              bg-[#166534]
+              bg-[#1E40AF]
               shadow-xl
-              shadow-green-900/10
+              shadow-ink-900/10
               transition-all
               duration-300
               group-hover:-translate-y-0.5
@@ -261,7 +261,7 @@ export default function Sidebar({
                 h-9
                 w-9
                 rounded-full
-                bg-green-300/30
+                bg-brand-300/30
                 blur-md
               "
             />
@@ -275,7 +275,7 @@ export default function Sidebar({
                 left-0
                 h-1
                 w-full
-                bg-[#4ADE80]
+                bg-[#FB923C]
               "
             />
 
@@ -302,7 +302,7 @@ export default function Sidebar({
                 text-[21px]
                 font-black
                 tracking-[-0.05em]
-                text-[#172019]
+                text-[#0F172A]
               "
             >
               Ordenix
@@ -315,7 +315,7 @@ export default function Sidebar({
                 font-bold
                 uppercase
                 tracking-[0.24em]
-                text-[#15803D]
+                text-[#1D4ED8]
               "
             >
               Delivery platform
@@ -339,7 +339,7 @@ export default function Sidebar({
             font-bold
             uppercase
             tracking-[0.2em]
-            text-[#7B8A80]
+            text-[#64748B]
           "
         >
           Navegación
@@ -374,8 +374,8 @@ export default function Sidebar({
 
                   ${
                     isActive
-                      ? "bg-[#166534] text-white shadow-lg shadow-green-900/10"
-                      : "text-[#66746B] hover:bg-[#E5F3E7] hover:text-[#166534]"
+                      ? "bg-[#1E40AF] text-white shadow-lg shadow-ink-900/10"
+                      : "text-[#475569] hover:bg-[#E2E8F0] hover:text-[#1E40AF]"
                   }
                 `}
               >
@@ -390,7 +390,7 @@ export default function Sidebar({
                       top-3
                       w-1
                       rounded-r-full
-                      bg-[#4ADE80]
+                      bg-[#FB923C]
                     "
                   />
                 )}
@@ -410,8 +410,8 @@ export default function Sidebar({
 
                     ${
                       isActive
-                        ? "bg-[#4ADE80] text-[#14532D]"
-                        : "bg-[#E8F2E9] text-[#718076] group-hover:bg-[#DCFCE7] group-hover:text-[#15803D]"
+                        ? "bg-[#FB923C] text-[#172554]"
+                        : "bg-[#EEF2F7] text-[#64748B] group-hover:bg-[#DBEAFE] group-hover:text-[#1D4ED8]"
                     }
                   `}
                 >
@@ -432,8 +432,8 @@ export default function Sidebar({
 
                       ${
                         isActive
-                          ? "text-green-100/70"
-                          : "text-[#7B887F]"
+                          ? "text-brand-100/70"
+                          : "text-[#64748B]"
                       }
                     `}
                   >

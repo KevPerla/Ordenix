@@ -20,7 +20,7 @@ export default function PanelShell({
   const [menuAbierto, setMenuAbierto] = useState(false);
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-transparent text-[#172019]">
+    <div className="min-h-screen overflow-x-hidden bg-transparent text-[#0F172A]">
       <Sidebar
         role={area}
         abierto={menuAbierto}
