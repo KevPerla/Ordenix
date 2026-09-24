@@ -7,6 +7,7 @@
   "scripts": {
     "build": "nest build",
     "db:init": "ts-node scripts/inicializar-bd.script.ts",
+    "db:migrate": "ts-node scripts/migrar.script.ts",
     "seed:admin": "ts-node scripts/sembrar-admin.script.ts",
     "seed:repartidor": "ts-node scripts/sembrar-repartidor.script.ts",
     "start": "nest start",
@@ -34,6 +35,7 @@
     "@nestjs/cli": "11.0.24",
     "@nestjs/schematics": "11.1.0",
     "@types/bcrypt": "6.0.0",
+    "@types/express": "^5.0.6",
     "@types/node": "24.13.3",
     "ts-loader": "9.6.2",
     "ts-node": "10.9.2",

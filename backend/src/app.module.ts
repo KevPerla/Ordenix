@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './modules/auth/auth.module';
+import { CatalogoModule } from './modules/catalogo/catalogo.module';
 import { HealthController } from './shared/adapters/controllers/health.controller';
 import { createDatabaseConfig } from './shared/infrastructure/database/database.config';
 
@@ -18,6 +19,7 @@ import { createDatabaseConfig } from './shared/infrastructure/database/database.
         createDatabaseConfig(configService),
     }),
     AuthModule,
+    CatalogoModule,
   ],
   controllers: [HealthController],
 })

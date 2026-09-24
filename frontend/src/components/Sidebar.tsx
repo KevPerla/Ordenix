@@ -35,6 +35,27 @@ const menus = {
       ),
     },
     {
+      name: "Catalogo",
+      href: "/cliente/menu",
+      description: "Productos disponibles",
+      icon: (
+        <svg
+          width="19"
+          height="19"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M3.5 7.5 12 3l8.5 4.5v9L12 21l-8.5-4.5z" />
+          <path d="M3.5 7.5 12 12l8.5-4.5" />
+          <path d="M12 12v9" />
+        </svg>
+      ),
+    },
+    {
       name: "Perfil",
       href: "/cliente/perfil",
       description: "Tu información",
@@ -72,6 +93,47 @@ const menus = {
           <rect x="14" y="3" width="7" height="7" rx="1" />
           <rect x="3" y="14" width="7" height="7" rx="1" />
           <rect x="14" y="14" width="7" height="7" rx="1" />
+        </svg>
+      ),
+    },
+    {
+      name: "Productos",
+      href: "/empresa/productos",
+      description: "Catalogo e inventario",
+      icon: (
+        <svg
+          width="19"
+          height="19"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M3.5 7.5 12 3l8.5 4.5v9L12 21l-8.5-4.5z" />
+          <path d="M3.5 7.5 12 12l8.5-4.5" />
+          <path d="M12 12v9" />
+        </svg>
+      ),
+    },
+    {
+      name: "Pedidos",
+      href: "/empresa/pedidos",
+      description: "Seguimiento y estados",
+      icon: (
+        <svg
+          width="19"
+          height="19"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M5 8h14l-1 12H6z" />
+          <path d="M9 8V6a3 3 0 0 1 6 0v2" />
         </svg>
       ),
     },

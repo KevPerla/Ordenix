@@ -166,6 +166,6 @@ function createJwtConfig(configService: ConfigService): JwtModuleOptions {
     JwtAuthGuard,
     RolesGuard,
   ],
-  exports: [JwtAuthGuard, RolesGuard],
+  exports: [JwtAuthGuard, RolesGuard, TOKEN_SERVICE_TOKEN],
 })
 export class AuthModule {}
