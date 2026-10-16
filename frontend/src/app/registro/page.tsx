@@ -406,7 +406,7 @@ export default function RegistroPage() {
               onBlur={revisar("nombreCompleto")}
               error={errores.nombreCompleto}
               icono={ICONO_USUARIO}
-              placeholder="Melissa Escobar"
+              placeholder="Ingrese su nombre"
               autoComplete="name"
               deshabilitado={cargando}
               autoFocus

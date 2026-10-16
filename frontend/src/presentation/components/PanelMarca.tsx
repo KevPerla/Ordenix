@@ -67,7 +67,7 @@ export default function PanelMarca({ lema, entrada }: PanelMarcaProps) {
           </div>
 
           <p className="mt-2.5 text-[17px] font-semibold tracking-[-0.01em]">
-            Melissa Escobar
+            Usuario
           </p>
           <p className="mt-0.5 text-[13.5px] text-[#A8B6CC]">
             3 artículos · Col. Ciudad Jardín · Efectivo
