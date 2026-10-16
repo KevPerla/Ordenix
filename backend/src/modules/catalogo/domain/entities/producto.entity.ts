@@ -1,6 +1,6 @@
-import { PrecioInvalidoError } from '../../application/errors/precio-invalido.error';
-import { StockInsuficienteError } from '../../application/errors/stock-insuficiente.error';
-import { StockInvalidoError } from '../../application/errors/stock-invalido.error';
+import { PrecioInvalidoError } from '../errors/precio-invalido.error';
+import { StockInsuficienteError } from '../errors/stock-insuficiente.error';
+import { StockInvalidoError } from '../errors/stock-invalido.error';
 
 export class Producto {
   constructor(

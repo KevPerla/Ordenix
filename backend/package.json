@@ -11,6 +11,8 @@
     "db:migrate": "ts-node scripts/migrar.script.ts",
     "seed:admin": "ts-node scripts/sembrar-admin.script.ts",
     "seed:repartidor": "ts-node scripts/sembrar-repartidor.script.ts",
+    "prueba:rollback": "ts-node scripts/pruebas/prueba-rollback.script.ts",
+    "prueba:concurrencia": "ts-node scripts/pruebas/prueba-concurrencia.script.ts",
     "start": "nest start",
     "start:debug": "nest start --debug --watch",
     "start:dev": "nest start --watch",

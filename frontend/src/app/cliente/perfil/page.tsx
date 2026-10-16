@@ -1,4 +1,4 @@
-import EnConstruccion from "@/components/EnConstruccion";
+import EnConstruccion from "@/presentation/components/EnConstruccion";
 
 export default function ClientePerfilPage() {
   return (

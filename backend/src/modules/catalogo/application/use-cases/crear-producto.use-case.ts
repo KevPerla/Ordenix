@@ -1,6 +1,6 @@
 import { Producto } from '../../domain/entities/producto.entity';
-import type { CategoriaRepository } from '../../domain/repositories/categoria.repository.interface';
-import type { ProductoRepository } from '../../domain/repositories/producto.repository.interface';
+import type { CategoriaRepository } from '../ports/categoria.repository.port';
+import type { ProductoRepository } from '../ports/producto.repository.port';
 import { CategoriaNoEncontradaError } from '../errors/categoria-no-encontrada.error';
 
 export interface CrearProductoInput {

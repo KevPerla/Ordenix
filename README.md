@@ -36,14 +36,46 @@ Infrastructure  →  Adapters  →  Application  →  Domain
 
 | Capa | Contenido |
 |---|---|
-| `domain/` | Entidad `User`, enum `UserRole`, alcance por rol y contrato del repositorio |
-| `application/` | Casos de uso y puertos (`PasswordHasher`, `TokenService`, `IdGenerator`) |
-| `adapters/` | Controladores REST, DTOs, guards y decoradores |
-| `infrastructure/` | TypeORM, BCrypt, JWT y configuración de base de datos |
+| `domain/` | Entidades (`User`, `Producto`, `Pedido`), enums, máquina de estados y errores de dominio |
+| `application/` | Casos de uso, errores de aplicación y puertos: repositorios, `UnidadDeTrabajo`, `PasswordHasher`, `TokenService` |
+| `adapters/` | Controladores REST, DTOs, presentadores, guards, filtro global de excepciones e interceptor del Envelope |
+| `infrastructure/` | Repositorios TypeORM/SQL, transacciones, BCrypt, JWT y configuración de base de datos |
 
-El enlace entre cada puerto y su implementación se declara en `auth.module.ts`
-mediante tokens de inyección, de modo que los casos de uso son independientes de
-NestJS, de TypeORM y de la librería de cifrado.
+Cada módulo (`auth`, `catalogo`, `pedidos`) declara en su `*.module.ts` el
+enlace entre puerto e implementación mediante tokens de inyección. Los
+repositorios traducen filas a entidades de dominio, de modo que ningún modelo de
+persistencia llega a los casos de uso ni a la API.
+
+### Pedidos
+
+- **Máquina de estados**: `CREADO → PAGADO → EN_PREPARACION → EN_CAMINO → ENTREGADO`,
+  con `CANCELADO` posible hasta antes de salir a entregar. La entidad `Pedido`
+  rechaza cualquier transición fuera de `TRANSICIONES_VALIDAS` (409).
+- **Transacción ACID**: `CrearPedidoUseCase` corre dentro de
+  `UnidadDeTrabajo.ejecutar`; cabecera, detalle, historial y descuento de stock
+  se confirman juntos o se revierten juntos.
+- **Bloqueo pesimista**: los productos del pedido se leen con
+  `SELECT ... FOR UPDATE` en orden de `id` para evitar sobreventa e interbloqueos.
+- **Concurrencia optimista en estados**: el cambio de estado actualiza con
+  `WHERE estado = <anterior>`; si otra persona lo cambió primero, responde 409.
+- **Envelope**: toda respuesta es `{ exito, datos | error, meta }`. Los errores
+  se clasifican en `DOMINIO` (400/404/409), `SEGURIDAD` (401/403) e
+  `INFRAESTRUCTURA` (500).
+
+## Arquitectura del frontend
+
+```
+src/
+├── domain/          Tipos y reglas puras: carrito, IVA, estados del pedido
+├── application/     Puertos (repositorios, almacenes) y casos de uso
+├── infrastructure/  Cliente HTTP con Envelope, repositorios HTTP, localStorage
+│                    y contenedor.ts, que conecta cada puerto con su implementación
+├── presentation/    Componentes, contextos, hooks y formato
+└── app/             Rutas de Next.js; solo componen la presentación
+```
+
+Las páginas nunca llaman a `fetch`: usan los casos de uso expuestos por
+`infrastructure/contenedor.ts`. El dominio no depende de React ni del navegador.
 
 ## Base de datos
 
@@ -108,6 +140,13 @@ La API queda disponible en `http://localhost:3001`.
 | `GET` | `/areas/cliente` | Rol CLIENTE |
 | `GET` | `/areas/reparto` | Rol REPARTIDOR |
 | `GET` | `/areas/administracion` | Rol ADMINISTRADOR |
+| `GET` | `/categorias` | Autenticado |
+| `POST`, `PATCH`, `DELETE` | `/categorias[/:id]` | Rol ADMINISTRADOR |
+| `GET` | `/productos`, `/productos/:id` | Autenticado (filtros `categoriaId`, `soloDisponibles`, `busqueda`) |
+| `POST`, `PATCH`, `DELETE` | `/productos[/:id]` | Rol ADMINISTRADOR |
+| `POST` | `/pedidos` | Rol CLIENTE |
+| `GET` | `/pedidos`, `/pedidos/:id` | Cliente ve los suyos; repartidor los listos y los suyos; administrador todos |
+| `PATCH` | `/pedidos/:id/estado` | ADMINISTRADOR, o REPARTIDOR hacia `EN_CAMINO` y `ENTREGADO` |
 
 ## Frontend
 
@@ -126,6 +165,12 @@ La aplicación queda disponible en `http://localhost:3000`.
 |---|---|
 | `/login` | Público |
 | `/registro` | Público |
+| `/cliente/menu` | Catálogo con filtro por categoría |
+| `/cliente/carrito` | Carrito, IVA y confirmación del pedido |
+| `/cliente/pedidos/[id]` | Seguimiento del pedido |
+| `/empresa/productos` | Mantenimiento de categorías y productos |
+| `/empresa/pedidos` | Monitoreo y cambio de estado |
+| `/repartidor/pedidos` | Entregas disponibles y en ruta |
 | `/cliente/**` | Rol CLIENTE |
 | `/empresa/**` | Rol ADMINISTRADOR |
 | `/repartidor/**` | Rol REPARTIDOR |
@@ -152,9 +197,9 @@ pagina, y la barra de navegacion lo muestra junto al nombre de la persona.
 
 | Rol | Como se crea | Panel | Menu lateral |
 |---|---|---|---|
-| CLIENTE | Registro publico en `/registro` | `/cliente` | Inicio, Perfil |
-| ADMINISTRADOR | `npm run seed:admin` | `/empresa` | Dashboard, Usuarios |
-| REPARTIDOR | `npm run seed:repartidor` | `/repartidor` | Inicio, Pedidos |
+| CLIENTE | Registro publico en `/registro` | `/cliente` | Inicio, Catálogo, Carrito, Mis pedidos, Perfil |
+| ADMINISTRADOR | `npm run seed:admin` | `/empresa` | Dashboard, Productos, Pedidos, Usuarios |
+| REPARTIDOR | `npm run seed:repartidor` | `/repartidor` | Inicio, Entregas |
 
 El rol no se acepta en el registro publico: toda cuenta creada desde el
 formulario nace como CLIENTE. Los otros dos roles se siembran por script, de
@@ -221,6 +266,9 @@ patrón `main`, con estas casillas marcadas:
 | `npm run lint` | Análisis estático |
 | `npm run typecheck` | Verificación de tipos |
 | `npm run db:init` | Aplica `database/schema.sql` a la base |
+| `npm run db:migrate` | Aplica las migraciones pendientes de `database/migrations` |
+| `npm run prueba:rollback` | Fuerza un fallo a mitad de un pedido y compara la base antes y después |
+| `npm run prueba:concurrencia` | Dispara dos compras simultáneas de un producto con stock 1 |
 | `npm run seed:admin` | Crea el administrador inicial |
 | `npm run seed:repartidor` | Crea el repartidor inicial |
 

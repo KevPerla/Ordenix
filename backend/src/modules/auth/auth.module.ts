@@ -27,7 +27,7 @@ import { GetCurrentUserUseCase } from './application/use-cases/get-current-user.
 import { GetRoleScopeUseCase } from './application/use-cases/get-role-scope.use-case';
 import { LoginUserUseCase } from './application/use-cases/login-user.use-case';
 import { RegisterUserUseCase } from './application/use-cases/register-user.use-case';
-import type { UserRepository } from './domain/repositories/user.repository.interface';
+import type { UserRepository } from './application/ports/user.repository.port';
 import { CryptoIdGenerator } from './infrastructure/identifiers/crypto-id-generator';
 import { TypeOrmUserRepository } from './infrastructure/persistence/typeorm-user.repository';
 import { UserOrmEntity } from './infrastructure/persistence/user.orm-entity';

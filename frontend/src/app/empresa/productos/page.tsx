@@ -1,26 +1,34 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
-import PanelShell from "@/components/PanelShell";
-import Campo, { CLASES_CONTROL } from "@/components/panel/Campo";
-import Dialogo from "@/components/panel/Dialogo";
-import EncabezadoPanel from "@/components/panel/EncabezadoPanel";
-import EstadoVacio from "@/components/panel/EstadoVacio";
-import Tarjeta from "@/components/panel/Tarjeta";
-import { IconoCaja } from "@/components/panel/iconos";
-import { useAviso } from "@/context/AvisoContext";
+import { useState, type FormEvent } from "react";
+import { mensajeDeError } from "@/application/errores";
 import {
-  ApiError,
-  actualizarProducto,
-  crearCategoria,
-  crearProducto,
-  eliminarProducto,
-  listarCategorias,
-  listarProductos,
+  estaAgotado,
+  quedanPocas,
+  validarProducto,
   type Categoria,
+  type DatosProducto,
+  type ErroresProducto,
   type Producto,
-} from "@/lib/api";
-import { agregarIva, formatearMoneda } from "@/lib/moneda";
+} from "@/domain/catalogo";
+import { agregarIva } from "@/domain/impuestos";
+import { catalogo } from "@/infrastructure/contenedor";
+import PanelShell from "@/presentation/components/PanelShell";
+import Campo, { CLASES_CONTROL } from "@/presentation/components/panel/Campo";
+import Dialogo from "@/presentation/components/panel/Dialogo";
+import EncabezadoPanel from "@/presentation/components/panel/EncabezadoPanel";
+import EstadoVacio from "@/presentation/components/panel/EstadoVacio";
+import Tarjeta from "@/presentation/components/panel/Tarjeta";
+import {
+  BOTON_COMPACTO,
+  BOTON_COMPACTO_PELIGRO,
+  BOTON_PRIMARIO,
+  BOTON_SECUNDARIO,
+} from "@/presentation/components/panel/estilos";
+import { IconoCaja } from "@/presentation/components/panel/iconos";
+import { useAviso } from "@/presentation/contexto/AvisoContext";
+import { formatearMoneda } from "@/presentation/formato/moneda";
+import { useConsulta } from "@/presentation/hooks/useConsulta";
 
 interface Formulario {
   categoriaId: string;
@@ -40,104 +48,69 @@ const VACIO: Formulario = {
   disponible: true,
 };
 
-type Errores = Partial<Record<keyof Formulario, string>>;
+function aDatos(valores: Formulario): DatosProducto {
+  return {
+    categoriaId: valores.categoriaId,
+    nombre: valores.nombre,
+    descripcion: valores.descripcion,
+    precio: valores.precio === "" ? Number.NaN : Number(valores.precio),
+    stock: valores.stock === "" ? Number.NaN : Number(valores.stock),
+    disponible: valores.disponible,
+  };
+}
 
-function validar(valores: Formulario): Errores {
-  const errores: Errores = {};
-
-  if (!valores.categoriaId) {
-    errores.categoriaId = "Elige una categoría";
-  }
-
-  if (valores.nombre.trim().length < 2) {
-    errores.nombre = "Escribe al menos 2 caracteres";
-  }
-
-  const precio = Number(valores.precio);
-  if (!valores.precio || !Number.isFinite(precio) || precio <= 0) {
-    errores.precio = "El precio debe ser mayor que cero";
-  }
-
-  const stock = Number(valores.stock);
-  if (valores.stock === "" || !Number.isInteger(stock) || stock < 0) {
-    errores.stock = "El stock debe ser un entero mayor o igual que cero";
-  }
-
-  return errores;
+function desdeProducto(producto: Producto): Formulario {
+  return {
+    categoriaId: producto.categoriaId,
+    nombre: producto.nombre,
+    descripcion: producto.descripcion ?? "",
+    precio: String(producto.precioSinIva),
+    stock: String(producto.stock),
+    disponible: producto.disponible,
+  };
 }
 
 export default function EmpresaProductosPage() {
   const { mostrarAviso } = useAviso();
 
-  const [productos, setProductos] = useState<Producto[]>([]);
-  const [categorias, setCategorias] = useState<Categoria[]>([]);
-  const [cargando, setCargando] = useState(true);
-  const [fallo, setFallo] = useState("");
-
   const [filtroCategoria, setFiltroCategoria] = useState("");
   const [abierto, setAbierto] = useState(false);
   const [editando, setEditando] = useState<Producto | null>(null);
+  const [porEliminar, setPorEliminar] = useState<Producto | null>(null);
   const [valores, setValores] = useState<Formulario>(VACIO);
-  const [errores, setErrores] = useState<Errores>({});
+  const [errores, setErrores] = useState<ErroresProducto>({});
   const [guardando, setGuardando] = useState(false);
-
   const [nuevaCategoria, setNuevaCategoria] = useState("");
   const [creandoCategoria, setCreandoCategoria] = useState(false);
+  const [categoriaEditando, setCategoriaEditando] = useState<Categoria | null>(null);
+  const [nombreCategoriaEditado, setNombreCategoriaEditado] = useState("");
+  const [categoriaPorEliminar, setCategoriaPorEliminar] = useState<Categoria | null>(null);
 
-  const [recarga, setRecarga] = useState(0);
+  const categorias = useConsulta(() => catalogo.categorias(true), []);
+  const productos = useConsulta(
+    () => catalogo.productos({ categoriaId: filtroCategoria || undefined }),
+    [filtroCategoria],
+    { respaldo: "No se pudo cargar el inventario" },
+  );
 
-  useEffect(() => {
-    let vigente = true;
+  const listaCategorias = categorias.datos ?? [];
+  const listaProductos = productos.datos ?? [];
 
-    Promise.all([
-      listarCategorias(true),
-      listarProductos(filtroCategoria ? { categoriaId: filtroCategoria } : {}),
-    ])
-      .then(([listaCategorias, listaProductos]) => {
-        if (!vigente) return;
-        setCategorias(listaCategorias);
-        setProductos(listaProductos);
-        setFallo("");
-      })
-      .catch((error: unknown) => {
-        if (!vigente) return;
-        setFallo(
-          error instanceof ApiError
-            ? error.message
-            : "No se pudo cargar el catálogo",
-        );
-      })
-      .finally(() => {
-        if (vigente) setCargando(false);
-      });
-
-    return () => {
-      vigente = false;
-    };
-  }, [filtroCategoria, recarga]);
-
-  function refrescar() {
-    setCargando(true);
-    setRecarga((numero) => numero + 1);
+  function cambiar<K extends keyof Formulario>(campo: K, valor: Formulario[K]) {
+    setValores((previos) => ({ ...previos, [campo]: valor }));
+    setErrores((previos) => ({ ...previos, [campo]: undefined }));
   }
 
   function abrirNuevo() {
     setEditando(null);
-    setValores({ ...VACIO, categoriaId: categorias[0]?.id ?? "" });
+    setValores({ ...VACIO, categoriaId: listaCategorias[0]?.id ?? "" });
     setErrores({});
     setAbierto(true);
   }
 
   function abrirEdicion(producto: Producto) {
     setEditando(producto);
-    setValores({
-      categoriaId: producto.categoriaId,
-      nombre: producto.nombre,
-      descripcion: producto.descripcion ?? "",
-      precio: String(producto.precioSinIva),
-      stock: String(producto.stock),
-      disponible: producto.disponible,
-    });
+    setValores(desdeProducto(producto));
     setErrores({});
     setAbierto(true);
   }
@@ -145,7 +118,8 @@ export default function EmpresaProductosPage() {
   async function guardar(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault();
 
-    const encontrados = validar(valores);
+    const datos = aDatos(valores);
+    const encontrados = validarProducto(datos);
     setErrores(encontrados);
 
     if (Object.keys(encontrados).length > 0) {
@@ -154,75 +128,83 @@ export default function EmpresaProductosPage() {
 
     setGuardando(true);
 
-    const datos = {
-      categoriaId: valores.categoriaId,
-      nombre: valores.nombre.trim(),
-      descripcion: valores.descripcion.trim() || undefined,
-      precio: Number(valores.precio),
-      stock: Number(valores.stock),
-      disponible: valores.disponible,
-    };
-
     try {
-      if (editando) {
-        await actualizarProducto(editando.id, datos);
-        mostrarAviso("Producto actualizado");
-      } else {
-        await crearProducto(datos);
-        mostrarAviso("Producto creado");
-      }
-
+      await catalogo.guardarProducto(datos, editando?.id);
+      mostrarAviso(editando ? "Producto actualizado" : "Producto creado");
       setAbierto(false);
-      refrescar();
+      productos.recargar();
     } catch (error: unknown) {
-      mostrarAviso(
-        error instanceof ApiError ? error.message : "No se pudo guardar",
-        "error",
-      );
+      mostrarAviso(mensajeDeError(error, "No se pudo guardar el producto"), "error");
     } finally {
       setGuardando(false);
     }
   }
 
-  async function borrar(producto: Producto) {
+  async function eliminar(producto: Producto) {
+    setPorEliminar(null);
+
     try {
-      await eliminarProducto(producto.id);
+      await catalogo.eliminarProducto(producto.id);
       mostrarAviso("Producto eliminado");
-      refrescar();
+      productos.recargar();
     } catch (error: unknown) {
-      mostrarAviso(
-        error instanceof ApiError ? error.message : "No se pudo eliminar",
-        "error",
-      );
+      mostrarAviso(mensajeDeError(error, "No se pudo eliminar el producto"), "error");
     }
   }
 
   async function agregarCategoria() {
-    if (nuevaCategoria.trim().length < 2) {
-      return;
-    }
-
     setCreandoCategoria(true);
 
     try {
-      const creada = await crearCategoria({ nombre: nuevaCategoria.trim() });
-      setCategorias((previas) => [...previas, creada]);
+      await catalogo.crearCategoria(nuevaCategoria);
       setNuevaCategoria("");
       mostrarAviso("Categoría creada");
+      categorias.recargar();
     } catch (error: unknown) {
-      mostrarAviso(
-        error instanceof ApiError
-          ? error.message
-          : "No se pudo crear la categoría",
-        "error",
-      );
+      mostrarAviso(mensajeDeError(error, "No se pudo crear la categoría"), "error");
     } finally {
       setCreandoCategoria(false);
     }
   }
 
+  async function renombrarCategoria(evento: FormEvent<HTMLFormElement>) {
+    evento.preventDefault();
+    if (!categoriaEditando) return;
+
+    try {
+      await catalogo.renombrarCategoria(categoriaEditando, nombreCategoriaEditado);
+      mostrarAviso("Categoría actualizada");
+      setCategoriaEditando(null);
+      categorias.recargar();
+    } catch (error: unknown) {
+      mostrarAviso(mensajeDeError(error, "No se pudo renombrar la categoría"), "error");
+    }
+  }
+
+  async function alternarCategoria(categoria: Categoria) {
+    try {
+      await catalogo.alternarCategoria(categoria);
+      mostrarAviso(categoria.activo ? "Categoría desactivada" : "Categoría activada");
+      categorias.recargar();
+    } catch (error: unknown) {
+      mostrarAviso(mensajeDeError(error, "No se pudo cambiar la categoría"), "error");
+    }
+  }
+
+  async function eliminarCategoria(categoria: Categoria) {
+    setCategoriaPorEliminar(null);
+
+    try {
+      await catalogo.eliminarCategoria(categoria.id);
+      mostrarAviso("Categoría eliminada");
+      categorias.recargar();
+    } catch (error: unknown) {
+      mostrarAviso(mensajeDeError(error, "No se pudo eliminar la categoría"), "error");
+    }
+  }
+
   function nombreCategoria(id: string): string {
-    return categorias.find((categoria) => categoria.id === id)?.nombre ?? "—";
+    return listaCategorias.find((categoria) => categoria.id === id)?.nombre ?? "—";
   }
 
   return (
@@ -231,42 +213,84 @@ export default function EmpresaProductosPage() {
         <EncabezadoPanel
           saludo="Catálogo"
           nombre="Productos"
-          descripcion="Crea, edita y retira productos. El precio se guarda sin IVA y el catálogo muestra ambos valores."
+          descripcion="Crea, edita y retira productos. El precio se guarda sin IVA y el catálogo del cliente muestra ambos valores al instante."
           accion={
             <button
               type="button"
               onClick={abrirNuevo}
-              disabled={categorias.length === 0}
-              className="presionable inline-flex h-11 items-center rounded-[var(--radius-control)] bg-brand-700 px-5 text-[14px] font-bold text-white shadow-[var(--sombra-media)] hover:bg-brand-800 disabled:opacity-50"
+              disabled={listaCategorias.length === 0}
+              className={BOTON_PRIMARIO}
             >
               Nuevo producto
             </button>
           }
         />
 
-        <Tarjeta
-          titulo="Categorías"
-          descripcion="Todo producto pertenece a una categoría"
-        >
-          <div className="flex flex-wrap items-center gap-2 px-5 py-4">
-            {categorias.map((categoria) => (
-              <span
-                key={categoria.id}
-                className="rounded-full border border-line bg-ink-50 px-3 py-1.5 text-[12.5px] font-semibold text-ink-700"
-              >
-                {categoria.nombre}
-              </span>
-            ))}
+        <Tarjeta titulo="Categorías" descripcion="Todo producto pertenece a una categoría">
+          {!categorias.cargando && listaCategorias.length === 0 ? (
+            <p className="px-5 py-4 text-[13px] text-ink-500">
+              Crea la primera categoría para poder registrar productos.
+            </p>
+          ) : (
+            <ul className="divide-y divide-line-soft">
+              {listaCategorias.map((categoria) => (
+                <li
+                  key={categoria.id}
+                  className="flex flex-wrap items-center justify-between gap-3 px-5 py-3"
+                >
+                  <span className="flex items-center gap-2.5">
+                    <span
+                      className={`text-[13.5px] font-bold ${
+                        categoria.activo ? "text-ink-900" : "text-ink-400 line-through"
+                      }`}
+                    >
+                      {categoria.nombre}
+                    </span>
+                    {!categoria.activo && (
+                      <span className="rounded-full bg-ink-100 px-2 py-0.5 text-[11px] font-bold text-ink-500">
+                        Oculta al cliente
+                      </span>
+                    )}
+                  </span>
 
-            {categorias.length === 0 && (
-              <p className="text-[13px] text-ink-500">
-                Todavía no hay categorías. Crea la primera para poder registrar
-                productos.
-              </p>
-            )}
-          </div>
+                  <span className="flex gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCategoriaEditando(categoria);
+                        setNombreCategoriaEditado(categoria.nombre);
+                      }}
+                      className={BOTON_COMPACTO}
+                    >
+                      Renombrar
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => void alternarCategoria(categoria)}
+                      className={BOTON_COMPACTO}
+                    >
+                      {categoria.activo ? "Desactivar" : "Activar"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCategoriaPorEliminar(categoria)}
+                      className={BOTON_COMPACTO_PELIGRO}
+                    >
+                      Eliminar
+                    </button>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
 
-          <div className="flex flex-col gap-2 border-t border-line-soft px-5 py-4 sm:flex-row">
+          <form
+            onSubmit={(evento) => {
+              evento.preventDefault();
+              void agregarCategoria();
+            }}
+            className="flex flex-col gap-2 border-t border-line-soft px-5 py-4 sm:flex-row"
+          >
             <input
               value={nuevaCategoria}
               onChange={(evento) => setNuevaCategoria(evento.target.value)}
@@ -276,31 +300,27 @@ export default function EmpresaProductosPage() {
             />
 
             <button
-              type="button"
-              onClick={() => void agregarCategoria()}
+              type="submit"
               disabled={creandoCategoria || nuevaCategoria.trim().length < 2}
-              className="presionable h-11 shrink-0 rounded-[var(--radius-control)] border border-line bg-surface px-5 text-[13.5px] font-bold text-ink-700 hover:border-brand-300 hover:text-brand-700 disabled:opacity-50"
+              className={`${BOTON_SECUNDARIO} shrink-0`}
             >
-              Agregar
+              Agregar categoría
             </button>
-          </div>
+          </form>
         </Tarjeta>
 
         <Tarjeta
           titulo="Inventario"
-          descripcion={`${productos.length} producto(s)`}
+          descripcion={`${listaProductos.length} ${listaProductos.length === 1 ? "producto" : "productos"}`}
           accion={
             <select
               value={filtroCategoria}
-              onChange={(evento) => {
-                setCargando(true);
-                setFiltroCategoria(evento.target.value);
-              }}
+              onChange={(evento) => setFiltroCategoria(evento.target.value)}
               aria-label="Filtrar por categoría"
               className="h-9 rounded-[var(--radius-control)] border border-line bg-ink-50 px-3 text-[13px] font-semibold text-ink-700 outline-none focus:border-brand-300"
             >
               <option value="">Todas las categorías</option>
-              {categorias.map((categoria) => (
+              {listaCategorias.map((categoria) => (
                 <option key={categoria.id} value={categoria.id}>
                   {categoria.nombre}
                 </option>
@@ -308,17 +328,17 @@ export default function EmpresaProductosPage() {
             </select>
           }
         >
-          {cargando ? (
+          {productos.cargando ? (
             <div className="space-y-2 p-5">
               {[0, 1, 2].map((fila) => (
                 <div key={fila} className="esqueleto h-12 rounded-xl" />
               ))}
             </div>
-          ) : fallo ? (
-            <div role="alert" className="px-5 py-6 text-[13.5px] text-red-600">
-              {fallo}
-            </div>
-          ) : productos.length === 0 ? (
+          ) : productos.error && listaProductos.length === 0 ? (
+            <p role="alert" className="px-5 py-6 text-[13.5px] text-red-600">
+              {productos.error}
+            </p>
+          ) : listaProductos.length === 0 ? (
             <EstadoVacio
               icono={IconoCaja}
               titulo="Sin productos"
@@ -340,42 +360,34 @@ export default function EmpresaProductosPage() {
                 </thead>
 
                 <tbody className="divide-y divide-line-soft">
-                  {productos.map((producto) => (
+                  {listaProductos.map((producto) => (
                     <tr key={producto.id} className="text-[13.5px]">
                       <td className="px-5 py-3">
-                        <p className="font-bold text-ink-900">
-                          {producto.nombre}
-                        </p>
-
+                        <p className="font-bold text-ink-900">{producto.nombre}</p>
                         {!producto.disponible && (
                           <span className="mt-0.5 inline-block rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-bold text-amber-700">
                             No disponible
                           </span>
                         )}
                       </td>
-
                       <td className="px-3 py-3 text-ink-600">
                         {nombreCategoria(producto.categoriaId)}
                       </td>
-
                       <td className="numero-tabular px-3 py-3 text-right text-ink-700">
                         {formatearMoneda(producto.precioSinIva)}
                       </td>
-
                       <td className="numero-tabular px-3 py-3 text-right text-ink-500">
                         {formatearMoneda(producto.iva)}
                       </td>
-
                       <td className="numero-tabular px-3 py-3 text-right font-bold text-ink-900">
                         {formatearMoneda(producto.precioConIva)}
                       </td>
-
                       <td className="numero-tabular px-3 py-3 text-right">
                         <span
                           className={
-                            producto.stock === 0
+                            estaAgotado(producto)
                               ? "font-bold text-red-600"
-                              : producto.stock < 5
+                              : quedanPocas(producto)
                                 ? "font-bold text-amber-600"
                                 : "text-ink-700"
                           }
@@ -383,21 +395,19 @@ export default function EmpresaProductosPage() {
                           {producto.stock}
                         </span>
                       </td>
-
                       <td className="px-5 py-3 text-right">
                         <div className="flex justify-end gap-1.5">
                           <button
                             type="button"
                             onClick={() => abrirEdicion(producto)}
-                            className="presionable rounded-lg border border-line px-3 py-1.5 text-[12.5px] font-bold text-ink-700 hover:border-brand-300 hover:text-brand-700"
+                            className={BOTON_COMPACTO}
                           >
                             Editar
                           </button>
-
                           <button
                             type="button"
-                            onClick={() => void borrar(producto)}
-                            className="presionable rounded-lg border border-line px-3 py-1.5 text-[12.5px] font-bold text-ink-500 hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+                            onClick={() => setPorEliminar(producto)}
+                            className={BOTON_COMPACTO_PELIGRO}
                           >
                             Eliminar
                           </button>
@@ -419,24 +429,15 @@ export default function EmpresaProductosPage() {
         descripcion="El precio se registra sin IVA. El impuesto se calcula solo."
       >
         <form onSubmit={guardar} className="space-y-4" noValidate>
-          <Campo
-            etiqueta="Categoría"
-            htmlFor="categoriaId"
-            error={errores.categoriaId}
-          >
+          <Campo etiqueta="Categoría" htmlFor="categoriaId" error={errores.categoriaId}>
             <select
               id="categoriaId"
               value={valores.categoriaId}
-              onChange={(evento) =>
-                setValores((previos) => ({
-                  ...previos,
-                  categoriaId: evento.target.value,
-                }))
-              }
+              onChange={(evento) => cambiar("categoriaId", evento.target.value)}
               className={CLASES_CONTROL}
             >
               <option value="">Selecciona una categoría</option>
-              {categorias.map((categoria) => (
+              {listaCategorias.map((categoria) => (
                 <option key={categoria.id} value={categoria.id}>
                   {categoria.nombre}
                 </option>
@@ -448,12 +449,7 @@ export default function EmpresaProductosPage() {
             <input
               id="nombre"
               value={valores.nombre}
-              onChange={(evento) =>
-                setValores((previos) => ({
-                  ...previos,
-                  nombre: evento.target.value,
-                }))
-              }
+              onChange={(evento) => cambiar("nombre", evento.target.value)}
               className={CLASES_CONTROL}
               placeholder="Pupusa revuelta"
             />
@@ -463,12 +459,7 @@ export default function EmpresaProductosPage() {
             <input
               id="descripcion"
               value={valores.descripcion}
-              onChange={(evento) =>
-                setValores((previos) => ({
-                  ...previos,
-                  descripcion: evento.target.value,
-                }))
-              }
+              onChange={(evento) => cambiar("descripcion", evento.target.value)}
               className={CLASES_CONTROL}
             />
           </Campo>
@@ -491,12 +482,7 @@ export default function EmpresaProductosPage() {
                 min="0.01"
                 inputMode="decimal"
                 value={valores.precio}
-                onChange={(evento) =>
-                  setValores((previos) => ({
-                    ...previos,
-                    precio: evento.target.value,
-                  }))
-                }
+                onChange={(evento) => cambiar("precio", evento.target.value)}
                 className={CLASES_CONTROL}
               />
             </Campo>
@@ -509,12 +495,7 @@ export default function EmpresaProductosPage() {
                 min="0"
                 inputMode="numeric"
                 value={valores.stock}
-                onChange={(evento) =>
-                  setValores((previos) => ({
-                    ...previos,
-                    stock: evento.target.value,
-                  }))
-                }
+                onChange={(evento) => cambiar("stock", evento.target.value)}
                 className={CLASES_CONTROL}
               />
             </Campo>
@@ -524,39 +505,104 @@ export default function EmpresaProductosPage() {
             <input
               type="checkbox"
               checked={valores.disponible}
-              onChange={(evento) =>
-                setValores((previos) => ({
-                  ...previos,
-                  disponible: evento.target.checked,
-                }))
-              }
+              onChange={(evento) => cambiar("disponible", evento.target.checked)}
               className="h-4 w-4 accent-brand-600"
             />
             Disponible en el catálogo
           </label>
 
           <div className="flex gap-2 pt-1">
+            <button type="submit" disabled={guardando} className={`${BOTON_PRIMARIO} flex-1`}>
+              {guardando ? "Guardando" : editando ? "Guardar cambios" : "Crear producto"}
+            </button>
+            <button type="button" onClick={() => setAbierto(false)} className={BOTON_SECUNDARIO}>
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </Dialogo>
+
+      <Dialogo
+        abierto={porEliminar !== null}
+        onCerrar={() => setPorEliminar(null)}
+        titulo={`¿Eliminar ${porEliminar?.nombre ?? "el producto"}?`}
+        descripcion="Desaparece del catálogo y del inventario. Si ya está en algún pedido no se puede eliminar; en ese caso márcalo como no disponible."
+      >
+        <div className="flex flex-col-reverse gap-2 sm:flex-row">
+          <button
+            type="button"
+            onClick={() => setPorEliminar(null)}
+            className={`${BOTON_SECUNDARIO} flex-1`}
+          >
+            Conservar
+          </button>
+          <button
+            type="button"
+            onClick={() => porEliminar && void eliminar(porEliminar)}
+            className="presionable inline-flex h-11 flex-1 items-center justify-center rounded-[var(--radius-control)] bg-red-600 px-5 text-[14px] font-bold text-white hover:bg-red-700"
+          >
+            Eliminar producto
+          </button>
+        </div>
+      </Dialogo>
+
+      <Dialogo
+        abierto={categoriaEditando !== null}
+        onCerrar={() => setCategoriaEditando(null)}
+        titulo="Renombrar categoría"
+        descripcion="El nuevo nombre se ve de inmediato en el filtro del catálogo del cliente."
+      >
+        <form onSubmit={renombrarCategoria} className="space-y-4" noValidate>
+          <Campo etiqueta="Nombre" htmlFor="nombreCategoria">
+            <input
+              id="nombreCategoria"
+              value={nombreCategoriaEditado}
+              onChange={(evento) => setNombreCategoriaEditado(evento.target.value)}
+              className={CLASES_CONTROL}
+            />
+          </Campo>
+
+          <div className="flex gap-2">
             <button
               type="submit"
-              disabled={guardando}
-              className="presionable h-11 flex-1 rounded-[var(--radius-control)] bg-brand-700 text-[14px] font-bold text-white hover:bg-brand-800 disabled:opacity-60"
+              disabled={nombreCategoriaEditado.trim().length < 2}
+              className={`${BOTON_PRIMARIO} flex-1`}
             >
-              {guardando
-                ? "Guardando"
-                : editando
-                  ? "Guardar cambios"
-                  : "Crear producto"}
+              Guardar nombre
             </button>
-
             <button
               type="button"
-              onClick={() => setAbierto(false)}
-              className="presionable h-11 rounded-[var(--radius-control)] border border-line px-5 text-[14px] font-bold text-ink-700 hover:bg-ink-50"
+              onClick={() => setCategoriaEditando(null)}
+              className={BOTON_SECUNDARIO}
             >
               Cancelar
             </button>
           </div>
         </form>
+      </Dialogo>
+
+      <Dialogo
+        abierto={categoriaPorEliminar !== null}
+        onCerrar={() => setCategoriaPorEliminar(null)}
+        titulo={`¿Eliminar ${categoriaPorEliminar?.nombre ?? "la categoría"}?`}
+        descripcion="Solo se puede eliminar una categoría sin productos. Si tiene productos, desactívala para ocultarla al cliente."
+      >
+        <div className="flex flex-col-reverse gap-2 sm:flex-row">
+          <button
+            type="button"
+            onClick={() => setCategoriaPorEliminar(null)}
+            className={`${BOTON_SECUNDARIO} flex-1`}
+          >
+            Conservar
+          </button>
+          <button
+            type="button"
+            onClick={() => categoriaPorEliminar && void eliminarCategoria(categoriaPorEliminar)}
+            className="presionable inline-flex h-11 flex-1 items-center justify-center rounded-[var(--radius-control)] bg-red-600 px-5 text-[14px] font-bold text-white hover:bg-red-700"
+          >
+            Eliminar categoría
+          </button>
+        </div>
       </Dialogo>
     </PanelShell>
   );

@@ -1,5 +1,5 @@
 import type { Producto } from '../../domain/entities/producto.entity';
-import type { ProductoRepository } from '../../domain/repositories/producto.repository.interface';
+import type { ProductoRepository } from '../ports/producto.repository.port';
 import { ProductoNoEncontradoError } from '../errors/producto-no-encontrado.error';
 
 export class ObtenerProductoUseCase {

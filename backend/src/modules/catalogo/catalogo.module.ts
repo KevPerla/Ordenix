@@ -13,15 +13,18 @@ import { EliminarProductoUseCase } from './application/use-cases/eliminar-produc
 import { ListarCategoriasUseCase } from './application/use-cases/listar-categorias.use-case';
 import { ListarProductosUseCase } from './application/use-cases/listar-productos.use-case';
 import { ObtenerProductoUseCase } from './application/use-cases/obtener-producto.use-case';
-import type { CategoriaRepository } from './domain/repositories/categoria.repository.interface';
-import type { ProductoRepository } from './domain/repositories/producto.repository.interface';
+import {
+  CATEGORIA_REPOSITORY_TOKEN,
+  type CategoriaRepository,
+} from './application/ports/categoria.repository.port';
+import {
+  PRODUCTO_REPOSITORY_TOKEN,
+  type ProductoRepository,
+} from './application/ports/producto.repository.port';
 import { CategoriaOrmEntity } from './infrastructure/persistence/categoria.orm-entity';
 import { ProductoOrmEntity } from './infrastructure/persistence/producto.orm-entity';
 import { TypeOrmCategoriaRepository } from './infrastructure/persistence/typeorm-categoria.repository';
 import { TypeOrmProductoRepository } from './infrastructure/persistence/typeorm-producto.repository';
-
-export const CATEGORIA_REPOSITORY_TOKEN = Symbol('CategoriaRepository');
-export const PRODUCTO_REPOSITORY_TOKEN = Symbol('ProductoRepository');
 
 @Module({
   imports: [
