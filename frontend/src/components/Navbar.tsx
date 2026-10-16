@@ -53,7 +53,7 @@ export default function Navbar({ title, onAbrirMenu }: NavbarProps) {
 
   return (
     <>
-      <header className="sticky top-0 z-30 flex h-[70px] items-center justify-between gap-3 border-b border-[#dfe9e0] bg-white/95 px-4 backdrop-blur-xl sm:h-[78px] sm:px-5 lg:px-10">
+      <header className="sticky top-0 z-30 flex h-[70px] items-center justify-between gap-3 border-b border-[#E2E8F0] bg-white/95 px-4 backdrop-blur-xl sm:h-[78px] sm:px-5 lg:px-10">
 
         <div className="flex min-w-0 items-center gap-3">
 
@@ -61,7 +61,7 @@ export default function Navbar({ title, onAbrirMenu }: NavbarProps) {
             type="button"
             onClick={onAbrirMenu}
             aria-label="Abrir menú"
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#DFE9E0] bg-[#F4F9F4] text-[#3F4F44] transition hover:border-[#86EFAC] hover:bg-[#DCFCE7] hover:text-[#15803D] lg:hidden"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#E2E8F0] bg-[#F6F8FC] text-[#334155] transition hover:border-[#93C5FD] hover:bg-[#DBEAFE] hover:text-[#1D4ED8] lg:hidden"
           >
             <svg
               width="20"
@@ -79,15 +79,15 @@ export default function Navbar({ title, onAbrirMenu }: NavbarProps) {
             </svg>
           </button>
 
-          <div className="hidden h-8 w-[4px] shrink-0 rounded-full bg-[#16A34A] sm:block" />
+          <div className="hidden h-8 w-[4px] shrink-0 rounded-full bg-[#2563EB] sm:block" />
 
           <div className="min-w-0">
-            <h1 className="truncate text-[18px] font-bold tracking-[-0.025em] text-[#172019] sm:text-[21px]">
+            <h1 className="truncate text-[18px] font-bold tracking-[-0.025em] text-[#0F172A] sm:text-[21px]">
               {title}
             </h1>
 
             {usuario && (
-              <p className="mt-0.5 hidden text-[11px] font-medium text-[#7A887E] sm:block">
+              <p className="mt-0.5 hidden text-[11px] font-medium text-[#64748B] sm:block">
                 Gestiona tu operación desde un solo lugar
               </p>
             )}
@@ -100,7 +100,7 @@ export default function Navbar({ title, onAbrirMenu }: NavbarProps) {
           <button
             type="button"
             aria-label="Notificaciones"
-            className="relative hidden h-11 w-11 items-center justify-center rounded-2xl border border-[#DFE9E0] bg-[#F4F9F4] text-[#718076] shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-[#86EFAC] hover:bg-[#DCFCE7] hover:text-[#15803D] sm:flex"
+            className="relative hidden h-11 w-11 items-center justify-center rounded-2xl border border-[#E2E8F0] bg-[#F6F8FC] text-[#64748B] shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-[#93C5FD] hover:bg-[#DBEAFE] hover:text-[#1D4ED8] sm:flex"
           >
             <svg
               width="19"
@@ -115,34 +115,34 @@ export default function Navbar({ title, onAbrirMenu }: NavbarProps) {
               <path d="M13.73 21a2 2 0 0 1-3.46 0" />
             </svg>
 
-            <span className="absolute right-2.5 top-2 h-2 w-2 rounded-full bg-[#16A34A] ring-2 ring-white" />
+            <span className="absolute right-2.5 top-2 h-2 w-2 rounded-full bg-[#2563EB] ring-2 ring-white" />
           </button>
 
-          <div className="mx-1 hidden h-9 w-px bg-[#DFE9E0] sm:block" />
+          <div className="mx-1 hidden h-9 w-px bg-[#E2E8F0] sm:block" />
 
           {usuario ? (
             <div className="flex items-center gap-2 sm:gap-3">
 
               <div className="hidden min-w-0 text-right sm:block">
-                <p className="truncate text-[13px] font-bold text-[#172019]">
+                <p className="truncate text-[13px] font-bold text-[#0F172A]">
                   {usuario.nombre}
                 </p>
 
                 <div className="mt-0.5 flex items-center justify-end gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#16A34A]" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#2563EB]" />
 
-                  <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#15803D]">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#1D4ED8]">
                     {usuario.rol}
                   </p>
                 </div>
               </div>
 
               <div className="relative shrink-0">
-                <div className="flex h-10 w-10 items-center justify-center rounded-[14px] bg-[#166534] text-[12px] font-bold text-white shadow-lg shadow-green-900/10 sm:h-11 sm:w-11 sm:rounded-[15px]">
+                <div className="flex h-10 w-10 items-center justify-center rounded-[14px] bg-[#1E40AF] text-[12px] font-bold text-white shadow-lg shadow-ink-900/10 sm:h-11 sm:w-11 sm:rounded-[15px]">
                   {initials}
                 </div>
 
-                <span className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-[3px] border-white bg-[#22C55E]" />
+                <span className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-[3px] border-white bg-[#3B82F6]" />
               </div>
 
               <button
@@ -150,7 +150,7 @@ export default function Navbar({ title, onAbrirMenu }: NavbarProps) {
                 onClick={() => setConfirmando(true)}
                 aria-label="Cerrar sesión"
                 title="Cerrar sesión"
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-[#91A097] transition-all hover:bg-red-50 hover:text-red-500"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-[#94A3B8] transition-all hover:bg-red-50 hover:text-red-500"
               >
                 <svg
                   width="18"
@@ -169,7 +169,7 @@ export default function Navbar({ title, onAbrirMenu }: NavbarProps) {
 
             </div>
           ) : (
-            <div className="text-sm font-medium text-[#91A097]">
+            <div className="text-sm font-medium text-[#94A3B8]">
               Invitado
             </div>
           )}
@@ -178,7 +178,7 @@ export default function Navbar({ title, onAbrirMenu }: NavbarProps) {
       </header>
 
       {confirmando && (
-        <div className="fixed inset-0 z-[60] flex items-end justify-center bg-[#0E2417]/50 px-4 pb-4 backdrop-blur-sm sm:items-center sm:pb-0">
+        <div className="fixed inset-0 z-[60] flex items-end justify-center bg-[#0B1220]/50 px-4 pb-4 backdrop-blur-sm sm:items-center sm:pb-0">
           <div
             aria-hidden="true"
             onClick={() => setConfirmando(false)}
@@ -189,7 +189,7 @@ export default function Navbar({ title, onAbrirMenu }: NavbarProps) {
             role="dialog"
             aria-modal="true"
             aria-labelledby="titulo-cerrar-sesion"
-            className="relative w-full max-w-[400px] rounded-[26px] border border-[#DCE8DE] bg-white p-6 shadow-2xl sm:p-7"
+            className="relative w-full max-w-[400px] rounded-[26px] border border-[#E2E8F0] bg-white p-6 shadow-2xl sm:p-7"
           >
             <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 text-red-500">
               <svg
@@ -211,12 +211,12 @@ export default function Navbar({ title, onAbrirMenu }: NavbarProps) {
 
             <h2
               id="titulo-cerrar-sesion"
-              className="mt-4 text-[21px] font-bold tracking-[-0.02em] text-[#172019]"
+              className="mt-4 text-[21px] font-bold tracking-[-0.02em] text-[#0F172A]"
             >
               ¿Cerrar sesión?
             </h2>
 
-            <p className="mt-2 text-[14.5px] leading-relaxed text-[#6B7A6F]">
+            <p className="mt-2 text-[14.5px] leading-relaxed text-[#64748B]">
               Vas a salir de tu cuenta. Tendrás que escribir tu correo y
               contraseña para volver a entrar.
             </p>
@@ -226,7 +226,7 @@ export default function Navbar({ title, onAbrirMenu }: NavbarProps) {
                 ref={cancelarRef}
                 type="button"
                 onClick={() => setConfirmando(false)}
-                className="h-12 flex-1 rounded-xl border border-[#DCE8DE] bg-white text-[15px] font-semibold text-[#3F4F44] transition hover:border-[#B9D3C0] hover:bg-[#F7FAF7] focus:outline-none focus:ring-4 focus:ring-green-100 active:scale-[0.98]"
+                className="h-12 flex-1 rounded-xl border border-[#E2E8F0] bg-white text-[15px] font-semibold text-[#334155] transition hover:border-[#C7D2E0] hover:bg-[#F6F8FC] focus:outline-none focus:ring-4 focus:ring-brand-100 active:scale-[0.98]"
               >
                 Cancelar
               </button>

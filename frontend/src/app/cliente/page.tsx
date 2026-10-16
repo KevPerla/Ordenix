@@ -1,520 +1,145 @@
 "use client";
 
+import Link from "next/link";
 import AccesoPorRol from "@/components/AccesoPorRol";
 import PanelShell from "@/components/PanelShell";
+import EncabezadoPanel from "@/components/panel/EncabezadoPanel";
+import EstadoVacio from "@/components/panel/EstadoVacio";
+import Metrica from "@/components/panel/Metrica";
+import Tarjeta from "@/components/panel/Tarjeta";
+import {
+  IconoBolsa,
+  IconoDinero,
+  IconoReloj,
+  IconoRuta,
+} from "@/components/panel/iconos";
 import { useAuth } from "@/context/AuthContext";
+
+const PASOS = [
+  {
+    titulo: "Explora el catálogo",
+    detalle: "Filtra por categoría y revisa precios con y sin IVA.",
+  },
+  {
+    titulo: "Arma tu carrito",
+    detalle: "Ajusta cantidades y mira el subtotal actualizarse al instante.",
+  },
+  {
+    titulo: "Confirma el pedido",
+    detalle: "Eliges dirección y el pedido entra en preparación.",
+  },
+  {
+    titulo: "Sigue la entrega",
+    detalle: "Ves cada cambio de estado hasta que toca tu puerta.",
+  },
+];
 
 export default function ClientePage() {
   const { usuario } = useAuth();
+  const primerNombre = usuario?.nombre?.split(" ")[0];
 
   return (
     <PanelShell area="cliente" titulo="Inicio">
-
-          <div className="mb-5">
-            <AccesoPorRol />
-          </div>
-
-          {/* =====================================================
-              BIENVENIDA
-          ===================================================== */}
-
-          <section
-            className="
-              relative
-              overflow-hidden
-              rounded-[28px]
-              border
-              border-[#DCE8DE]
-              bg-gradient-to-br
-              from-[#EAF7EC]
-              via-white
-              to-[#F5FAF5]
-              p-8
-              shadow-sm
-              shadow-green-900/[0.04]
-              lg:p-10
-            "
-          >
-
-            {/* Decoración verde */}
-
-            <div
-              className="
-                pointer-events-none
-                absolute
-                -right-20
-                -top-20
-                h-72
-                w-72
-                rounded-full
-                bg-green-400/10
-                blur-3xl
-              "
-            />
-
-            <div
-              className="
-                pointer-events-none
-                absolute
-                -bottom-20
-                -left-20
-                h-56
-                w-56
-                rounded-full
-                bg-green-300/10
-                blur-3xl
-              "
-            />
-
-            <div className="relative">
-
-              {/* Etiqueta */}
-
-              <span
-                className="
-                  inline-flex
-                  items-center
-                  rounded-full
-                  border
-                  border-green-200
-                  bg-green-50
-                  px-3
-                  py-1
-                  text-xs
-                  font-semibold
-                  text-green-700
-                "
-              >
-                ✨ Ordenix
-              </span>
-
-              {/* Título */}
-
-              <h2
-                className="
-                  mt-6
-                  text-3xl
-                  font-bold
-                  tracking-tight
-                  text-[#172019]
-                  sm:text-4xl
-                "
-              >
-                Hola,{" "}
-
-                <span className="text-[#16A34A]">
-                  {usuario?.nombre || "Cliente"}
-                </span>{" "}
-
-                👋
-              </h2>
-
-              {/* Descripción */}
-
-              <p
-                className="
-                  mt-4
-                  max-w-xl
-                  text-sm
-                  leading-6
-                  text-[#718076]
-                "
-              >
-                Bienvenido a tu panel de cliente.
-                Desde aquí podrás gestionar tu cuenta
-                y realizar tus pedidos.
-              </p>
-
-            </div>
-          </section>
-
-
-          {/* =====================================================
-              TARJETAS DE INFORMACIÓN
-          ===================================================== */}
-
-          <section className="mt-8 grid gap-5 sm:grid-cols-2">
-
-            {/* ESTADO DE CUENTA */}
-
-            <div
-              className="
-                group
-                rounded-2xl
-                border
-                border-[#DCE8DE]
-                bg-white
-                p-6
-                shadow-sm
-                shadow-green-900/[0.04]
-                transition-all
-                duration-200
-                hover:-translate-y-1
-                hover:shadow-md
-              "
+      <div className="space-y-6">
+        <EncabezadoPanel
+          saludo="Hola"
+          nombre={primerNombre ? `Hola, ${primerNombre}` : "Bienvenido"}
+          descripcion="Pide de tus lugares favoritos y sigue cada pedido hasta que llegue a tu puerta."
+          accion={
+            <Link
+              href="/cliente/menu"
+              className="presionable inline-flex h-11 items-center gap-2 rounded-[var(--radius-control)] bg-accent-600 px-5 text-[14px] font-bold text-white shadow-[var(--sombra-media)] hover:bg-accent-700"
             >
-              <div className="flex items-start justify-between">
+              Ver catálogo
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14" />
+                <path d="m13 6 6 6-6 6" />
+              </svg>
+            </Link>
+          }
+        />
 
-                <div>
-                  <p className="text-sm font-medium text-[#718076]">
-                    Estado de cuenta
-                  </p>
+        <AccesoPorRol />
 
-                  <p className="mt-3 text-xl font-bold text-[#16A34A]">
-                    Activa
-                  </p>
-                </div>
-
-                <div
-                  className="
-                    flex
-                    h-11
-                    w-11
-                    items-center
-                    justify-center
-                    rounded-xl
-                    bg-[#DCFCE7]
-                    text-[#15803D]
-                  "
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                  >
-                    <path d="M20 6L9 17l-5-5" />
-                  </svg>
-                </div>
-
-              </div>
-            </div>
-
-
-            {/* ROL */}
-
-            <div
-              className="
-                group
-                rounded-2xl
-                border
-                border-[#DCE8DE]
-                bg-white
-                p-6
-                shadow-sm
-                shadow-green-900/[0.04]
-                transition-all
-                duration-200
-                hover:-translate-y-1
-                hover:shadow-md
-              "
-            >
-              <div className="flex items-start justify-between">
-
-                <div>
-                  <p className="text-sm font-medium text-[#718076]">
-                    Rol
-                  </p>
-
-                  <p className="mt-3 text-xl font-bold text-[#172019]">
-                    Cliente
-                  </p>
-                </div>
-
-                <div
-                  className="
-                    flex
-                    h-11
-                    w-11
-                    items-center
-                    justify-center
-                    rounded-xl
-                    bg-[#E8F2E9]
-                    text-[#166534]
-                  "
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                  >
-                    <circle cx="12" cy="8" r="4" />
-                    <path d="M4 21c.8-4.1 3.5-6 8-6s7.2 1.9 8 6" />
-                  </svg>
-                </div>
-
-              </div>
-            </div>
-
-          </section>
-
-          {/* =====================================================
-    BARRA DE BÚSQUEDA
-===================================================== */}
-
-<section className="mt-8">
-
-  <div
-    className="
-      flex
-      flex-col
-      gap-4
-      rounded-[24px]
-      border
-      border-[#DCE8DE]
-      bg-white
-      p-4
-      shadow-sm
-      shadow-green-900/[0.04]
-      sm:flex-row
-      sm:items-center
-    "
-  >
-
-    {/* BUSCADOR */}
-
-    <div className="relative flex-1">
-
-      {/* Icono */}
-
-      <div
-        className="
-          pointer-events-none
-          absolute
-          left-4
-          top-1/2
-          flex
-          -translate-y-1/2
-          items-center
-          justify-center
-          text-[#8A968E]
-        "
-      >
-        <svg
-          width="19"
-          height="19"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.8"
+        <section
+          aria-label="Resumen de tu actividad"
+          className="grid gap-4 sm:grid-cols-3"
         >
-          <circle cx="11" cy="11" r="7" />
-          <path d="M20 20l-4-4" />
-        </svg>
-      </div>
+          <Metrica
+            etiqueta="Pedidos activos"
+            valor="0"
+            detalle="Nada en camino ahora mismo"
+            icono={IconoRuta}
+            tono="marca"
+          />
+          <Metrica
+            etiqueta="Pedidos totales"
+            valor="0"
+            detalle="Tu historial empieza con el primero"
+            icono={IconoBolsa}
+            tono="neutro"
+          />
+          <Metrica
+            etiqueta="Gasto acumulado"
+            valor="$0.00"
+            detalle="IVA incluido"
+            icono={IconoDinero}
+            tono="exito"
+          />
+        </section>
 
-      <input
-        type="text"
-        placeholder="Buscar pedidos, restaurantes o productos..."
-        className="
-          h-12
-          w-full
-          rounded-xl
-          border
-          border-[#DCE8DE]
-          bg-[#F7FAF7]
-          pl-11
-          pr-4
-          text-sm
-          text-[#172019]
-          outline-none
-          transition
-          placeholder:text-[#9AA79F]
-          focus:border-[#86EFAC]
-          focus:bg-white
-          focus:ring-4
-          focus:ring-green-100
-        "
-      />
-
-    </div>
-
-
-    {/* BOTÓN BUSCAR */}
-
-    <button
-      type="button"
-      className="
-        flex
-        h-12
-        items-center
-        justify-center
-        gap-2
-        rounded-xl
-        bg-[#166534]
-        px-6
-        text-sm
-        font-bold
-        text-white
-        shadow-sm
-        shadow-green-900/10
-        transition
-        hover:bg-[#15803D]
-        hover:shadow-md
-        active:scale-[0.98]
-      "
-    >
-
-      <svg
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-      >
-        <circle cx="11" cy="11" r="7" />
-        <path d="M20 20l-4-4" />
-      </svg>
-
-      Buscar
-
-    </button>
-
-  </div>
-
-</section>
-
-
-
-          {/* =====================================================
-              ACTIVIDAD RECIENTE
-          ===================================================== */}
-
-          <section className="mt-8">
-
-            <div
-              className="
-                overflow-hidden
-                rounded-[24px]
-                border
-                border-[#DCE8DE]
-                bg-white
-                shadow-sm
-                shadow-green-900/[0.04]
-              "
-            >
-
-              {/* ENCABEZADO */}
-
-              <div
-                className="
-                  flex
-                  items-center
-                  justify-between
-                  border-b
-                  border-[#E8EFE9]
-                  px-6
-                  py-5
-                "
-              >
-
-                <div>
-                  <h3 className="text-lg font-bold text-[#172019]">
-                    Actividad reciente
-                  </h3>
-
-                  <p className="mt-1 text-xs text-[#8A968E]">
-                    Resumen de tu actividad en Ordenix
-                  </p>
-                </div>
-
-                <div
-                  className="
-                    flex
-                    h-10
-                    w-10
-                    items-center
-                    justify-center
-                    rounded-xl
-                    bg-[#E8F2E9]
-                    text-[#15803D]
-                  "
+        <div className="grid gap-6 xl:grid-cols-[1.4fr_1fr]">
+          <Tarjeta
+            titulo="Tus pedidos"
+            descripcion="El estado de lo que has pedido"
+          >
+            <EstadoVacio
+              icono={IconoReloj}
+              titulo="Todavía no has pedido nada"
+              descripcion="Cuando hagas tu primer pedido vas a poder seguirlo aquí paso a paso, desde que entra en preparación hasta que te lo entregan."
+              accion={
+                <Link
+                  href="/cliente/menu"
+                  className="presionable inline-flex h-10 items-center rounded-[var(--radius-control)] bg-brand-700 px-4 text-[13.5px] font-bold text-white shadow-[var(--sombra-baja)] hover:bg-brand-800"
                 >
-                  <svg
-                    width="19"
-                    height="19"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                  >
-                    <path d="M3 12h4l3-8 4 16 3-8h4" />
-                  </svg>
-                </div>
+                  Explorar el catálogo
+                </Link>
+              }
+            />
+          </Tarjeta>
 
-              </div>
-
-
-              {/* ACTIVIDAD */}
-
-              <div className="p-6">
-
-                <div className="flex items-center gap-4">
-
-                  <div
-                    className="
-                      flex
-                      h-11
-                      w-11
-                      shrink-0
-                      items-center
-                      justify-center
-                      rounded-xl
-                      bg-[#DCFCE7]
-                      text-[#15803D]
-                    "
-                  >
-                    <svg
-                      width="19"
-                      height="19"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                    >
-                      <path d="M20 6L9 17l-5-5" />
-                    </svg>
-                  </div>
-
-                  <div className="flex-1">
-                    <p className="text-sm font-semibold text-[#172019]">
-                      Sesión iniciada correctamente
-                    </p>
-
-                    <p className="mt-1 text-xs text-[#8A968E]">
-                      Tu cuenta está activa y lista para utilizarse.
-                    </p>
-                  </div>
-
-                  <span
-                    className="
-                      hidden
-                      rounded-full
-                      bg-[#DCFCE7]
-                      px-3
-                      py-1
-                      text-[10px]
-                      font-bold
-                      text-[#15803D]
-                      sm:block
-                    "
-                  >
-                    ACTIVA
+          <Tarjeta titulo="Cómo funciona" descripcion="Cuatro pasos y listo">
+            <ol className="divide-y divide-line-soft">
+              {PASOS.map((paso, indice) => (
+                <li key={paso.titulo} className="flex gap-3.5 px-5 py-3.5">
+                  <span className="numero-tabular grid h-6 w-6 shrink-0 place-items-center rounded-full bg-brand-50 text-[12px] font-bold text-brand-700">
+                    {indice + 1}
                   </span>
 
-                </div>
-
-              </div>
-
-            </div>
-
-          </section>
+                  <span className="min-w-0">
+                    <span className="block text-[13.5px] font-bold text-ink-900">
+                      {paso.titulo}
+                    </span>
+                    <span className="mt-0.5 block text-[12.5px] leading-relaxed text-ink-500">
+                      {paso.detalle}
+                    </span>
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </Tarjeta>
+        </div>
+      </div>
     </PanelShell>
   );
 }

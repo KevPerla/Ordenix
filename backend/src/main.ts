@@ -1,6 +1,8 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { ExcepcionGlobalFilter } from './shared/adapters/filters/excepcion-global.filter';
+import { EnvelopeInterceptor } from './shared/adapters/interceptors/envelope.interceptor';
 
 const DEFAULT_PORT = 3001;
 const DEFAULT_FRONTEND_ORIGIN = 'http://localhost:3000';
@@ -37,6 +39,9 @@ async function bootstrap(): Promise<void> {
       stopAtFirstError: true,
     }),
   );
+
+  app.useGlobalInterceptors(new EnvelopeInterceptor());
+  app.useGlobalFilters(new ExcepcionGlobalFilter());
 
   app.enableCors({
     origin: frontendOrigins,

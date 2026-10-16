@@ -18,8 +18,8 @@ export default function EnConstruccion({
 }: EnConstruccionProps) {
   return (
     <PanelShell area={area} titulo={titulo}>
-          <section className="mx-auto flex max-w-2xl flex-col items-center rounded-[28px] border border-dashed border-[#CFE3D3] bg-white/70 px-6 py-14 text-center shadow-sm">
-            <span className="flex h-16 w-16 items-center justify-center rounded-2xl border border-[#DCFCE7] bg-[#F0FDF4] text-[#15803D]">
+          <section className="mx-auto flex max-w-2xl flex-col items-center rounded-[28px] border border-dashed border-[#CBD5E1] bg-white/70 px-6 py-14 text-center shadow-sm">
+            <span className="flex h-16 w-16 items-center justify-center rounded-2xl border border-[#DBEAFE] bg-[#EFF6FF] text-[#1D4ED8]">
               <svg
                 width="26"
                 height="26"
@@ -37,22 +37,22 @@ export default function EnConstruccion({
               </svg>
             </span>
 
-            <h2 className="mt-6 text-[26px] font-bold tracking-[-0.025em] text-[#172019]">
+            <h2 className="mt-6 text-[26px] font-bold tracking-[-0.025em] text-[#0F172A]">
               {titulo} llega en el siguiente avance
             </h2>
 
-            <p className="mt-3 max-w-md text-[15px] leading-relaxed text-[#6B7A6F]">
+            <p className="mt-3 max-w-md text-[15px] leading-relaxed text-[#64748B]">
               {descripcion}
             </p>
 
-            <span className="mt-6 inline-flex items-center gap-2 rounded-full border border-[#DCFCE7] bg-[#F0FDF4] px-4 py-1.5 text-[12px] font-bold uppercase tracking-[0.08em] text-[#15803D]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#22C55E]" />
+            <span className="mt-6 inline-flex items-center gap-2 rounded-full border border-[#DBEAFE] bg-[#EFF6FF] px-4 py-1.5 text-[12px] font-bold uppercase tracking-[0.08em] text-[#1D4ED8]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#3B82F6]" />
               En construcción
             </span>
 
             <Link
               href={volverA}
-              className="mt-8 inline-flex h-12 items-center justify-center rounded-2xl bg-[#16A34A] px-6 text-[15px] font-semibold text-white shadow-lg shadow-green-900/15 transition-all duration-200 hover:bg-[#15803D] active:scale-[0.97]"
+              className="mt-8 inline-flex h-12 items-center justify-center rounded-2xl bg-[#2563EB] px-6 text-[15px] font-semibold text-white shadow-lg shadow-ink-900/15 transition-all duration-200 hover:bg-[#1D4ED8] active:scale-[0.97]"
             >
               Volver al inicio
             </Link>

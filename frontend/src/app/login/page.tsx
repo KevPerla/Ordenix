@@ -91,7 +91,7 @@ export default function LoginPage() {
         lema={
           <>
             Pide. Sigue.{" "}
-            <span className="text-[#4ADE80]">Recibe.</span>
+            <span className="text-[#FB923C]">Recibe.</span>
           </>
         }
         entrada="Sigue tu pedido en tiempo real, hasta que toca tu puerta."
@@ -100,30 +100,30 @@ export default function LoginPage() {
       <main className="flex min-h-screen items-center justify-center px-5 py-10 sm:px-8 lg:min-h-0 lg:py-14">
         <div className="w-full max-w-[400px]">
           <div className="mb-7 flex items-center gap-3 lg:hidden">
-            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#22C55E] to-[#15803D] text-lg font-black text-white shadow-lg shadow-green-900/20">
+            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#3B82F6] to-[#1D4ED8] text-lg font-black text-white shadow-lg shadow-ink-900/20">
               O
             </span>
             <div>
-              <p className="text-[19px] font-black tracking-[-0.04em] text-[#172019]">
+              <p className="text-[19px] font-black tracking-[-0.04em] text-[#0F172A]">
                 Ordenix
               </p>
-              <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-[#15803D]">
+              <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-[#1D4ED8]">
                 Delivery platform
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-3.5">
-            <span className="hidden h-12 w-12 shrink-0 items-center justify-center rounded-[17px] bg-gradient-to-br from-[#22C55E] to-[#15803D] text-[22px] font-black tracking-[-0.08em] text-white shadow-lg shadow-green-900/20 lg:flex">
+            <span className="hidden h-12 w-12 shrink-0 items-center justify-center rounded-[17px] bg-gradient-to-br from-[#3B82F6] to-[#1D4ED8] text-[22px] font-black tracking-[-0.08em] text-white shadow-lg shadow-ink-900/20 lg:flex">
               O
             </span>
 
-            <h1 className="text-[30px] font-bold leading-[1.1] tracking-[-0.03em] text-[#172019] sm:text-[32px]">
+            <h1 className="text-[30px] font-bold leading-[1.1] tracking-[-0.03em] text-[#0F172A] sm:text-[32px]">
               Iniciar sesión
             </h1>
           </div>
 
-          <span className="mt-3.5 block h-[3px] w-11 rounded-full bg-gradient-to-r from-[#22C55E] to-[#15803D]" />
+          <span className="mt-3.5 block h-[3px] w-11 rounded-full bg-gradient-to-r from-[#3B82F6] to-[#1D4ED8]" />
 
           <form onSubmit={handleLogin} className="mt-7 space-y-5" noValidate>
             {error && (
@@ -179,7 +179,7 @@ export default function LoginPage() {
               type="submit"
               disabled={cargando}
               aria-busy={cargando || undefined}
-              className="group flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#166534] text-[15px] font-bold text-white shadow-lg shadow-green-900/15 transition-all duration-150 hover:bg-[#15803D] active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-60"
+              className="group flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#1E40AF] text-[15px] font-bold text-white shadow-lg shadow-ink-900/15 transition-all duration-150 hover:bg-[#1D4ED8] active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {cargando ? (
                 <>
@@ -209,11 +209,11 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p className="mt-7 border-t border-[#E8EFE9] pt-6 text-center text-[14.5px] text-[#718076]">
+          <p className="mt-7 border-t border-[#EEF2F7] pt-6 text-center text-[14.5px] text-[#64748B]">
             ¿Todavía no tienes cuenta?{" "}
             <Link
               href="/registro"
-              className="font-bold text-[#15803D] underline-offset-4 transition hover:text-[#166534] hover:underline"
+              className="font-bold text-[#1D4ED8] underline-offset-4 transition hover:text-[#1E40AF] hover:underline"
             >
               Crear una
             </Link>

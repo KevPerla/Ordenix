@@ -48,13 +48,13 @@ export default function CampoAuth({
     <div>
       <label
         htmlFor={id}
-        className="mb-2 block text-sm font-semibold text-[#172019]"
+        className="mb-2 block text-sm font-semibold text-[#0F172A]"
       >
         {etiqueta}
       </label>
 
       <div className="relative flex items-center">
-        <span className="pointer-events-none absolute left-4 flex text-[#8A968E]">
+        <span className="pointer-events-none absolute left-4 flex text-[#94A3B8]">
           {icono}
         </span>
 
@@ -72,12 +72,12 @@ export default function CampoAuth({
           autoFocus={autoFocus}
           aria-invalid={error ? true : undefined}
           aria-describedby={error || ayuda ? idMensaje : undefined}
-          className={`h-12 w-full rounded-xl border bg-[#F7FAF7] pl-11 text-[15px] text-[#172019] outline-none transition placeholder:text-[#9AA79F] focus:bg-white focus:ring-4 disabled:cursor-not-allowed disabled:opacity-60 ${
+          className={`h-12 w-full rounded-xl border bg-[#F6F8FC] pl-11 text-[15px] text-[#0F172A] outline-none transition placeholder:text-[#94A3B8] focus:bg-white focus:ring-4 disabled:cursor-not-allowed disabled:opacity-60 ${
             esPassword ? "pr-12" : "pr-4"
           } ${
             error
               ? "border-red-300 focus:border-red-400 focus:ring-red-100"
-              : "border-[#DCE8DE] hover:border-[#B9D3C0] focus:border-[#86EFAC] focus:ring-green-100"
+              : "border-[#E2E8F0] hover:border-[#C7D2E0] focus:border-[#93C5FD] focus:ring-brand-100"
           }`}
         />
 
@@ -88,7 +88,7 @@ export default function CampoAuth({
             aria-label={visible ? "Ocultar contraseña" : "Mostrar contraseña"}
             aria-pressed={visible}
             tabIndex={deshabilitado ? -1 : 0}
-            className="absolute right-1 grid h-11 w-11 place-items-center rounded-lg text-[#8A968E] transition hover:bg-[#EFF6F0] hover:text-[#172019]"
+            className="absolute right-1 grid h-11 w-11 place-items-center rounded-lg text-[#94A3B8] transition hover:bg-[#EFF6FF] hover:text-[#0F172A]"
           >
             {visible ? (
               <svg
@@ -150,7 +150,7 @@ export default function CampoAuth({
           {error}
         </p>
       ) : ayuda ? (
-        <p id={idMensaje} className="mt-2 text-[12.5px] text-[#718076]">
+        <p id={idMensaje} className="mt-2 text-[12.5px] text-[#64748B]">
           {ayuda}
         </p>
       ) : null}

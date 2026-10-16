@@ -31,14 +31,14 @@ export default function PanelMarca({ lema, entrada }: PanelMarcaProps) {
   }, []);
 
   return (
-    <aside className="relative isolate hidden flex-col gap-5 overflow-hidden bg-[#0E2417] px-7 py-9 text-[#F2F8F3] lg:sticky lg:top-0 lg:flex lg:h-screen lg:self-start lg:px-10 lg:py-12">
+    <aside className="relative isolate hidden flex-col gap-5 overflow-hidden bg-[#0B1220] px-7 py-9 text-[#F6F8FC] lg:sticky lg:top-0 lg:flex lg:h-screen lg:self-start lg:px-10 lg:py-12">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(75%_50%_at_12%_5%,rgba(34,197,94,0.34),transparent_62%),radial-gradient(55%_45%_at_90%_95%,rgba(22,163,74,0.22),transparent_66%)]"
+        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(75%_50%_at_12%_5%,rgba(37, 99, 235,0.34),transparent_62%),radial-gradient(55%_45%_at_90%_95%,rgba(37, 99, 235,0.22),transparent_66%)]"
       />
 
       <div className="flex items-center gap-3">
-        <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#22C55E] to-[#15803D] text-lg font-black text-white shadow-lg shadow-green-900/40">
+        <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#3B82F6] to-[#1D4ED8] text-lg font-black text-white shadow-lg shadow-ink-900/40">
           O
         </span>
         <span className="text-[21px] font-bold tracking-[-0.02em]">
@@ -51,14 +51,14 @@ export default function PanelMarca({ lema, entrada }: PanelMarcaProps) {
           <h2 className="max-w-[15ch] text-[34px] font-bold leading-[1.06] tracking-[-0.03em] lg:text-[44px]">
             {lema}
           </h2>
-          <p className="mt-3 max-w-[34ch] text-[14.5px] leading-snug text-[#B7CFBE]">
+          <p className="mt-3 max-w-[34ch] text-[14.5px] leading-snug text-[#BFDBFE]">
             {entrada}
           </p>
         </div>
 
         <div className="w-full max-w-[340px] rounded-[24px] border border-white/15 bg-white/[0.07] p-5 shadow-2xl backdrop-blur-md">
           <div className="flex items-center justify-between gap-3">
-            <span className="font-mono text-[12px] tracking-[0.08em] text-[#9DBCA8]">
+            <span className="font-mono text-[12px] tracking-[0.08em] text-[#A8B6CC]">
               ORD-2481
             </span>
             <span className="font-mono text-[15px] font-medium tabular-nums">
@@ -69,7 +69,7 @@ export default function PanelMarca({ lema, entrada }: PanelMarcaProps) {
           <p className="mt-2.5 text-[17px] font-semibold tracking-[-0.01em]">
             Melissa Escobar
           </p>
-          <p className="mt-0.5 text-[13.5px] text-[#9DBCA8]">
+          <p className="mt-0.5 text-[13.5px] text-[#A8B6CC]">
             3 artículos · Col. Ciudad Jardín · Efectivo
           </p>
 
@@ -86,16 +86,16 @@ export default function PanelMarca({ lema, entrada }: PanelMarcaProps) {
                     esActivo
                       ? "font-semibold text-white"
                       : hecho
-                        ? "text-[#CBE4D4]"
-                        : "text-[#6E8A79]"
+                        ? "text-[#DBEAFE]"
+                        : "text-[#93C5FD]"
                   }`}
                 >
                   <span
                     className={`relative grid h-[18px] w-[18px] shrink-0 place-items-center rounded-full border-[1.5px] transition-colors duration-300 ${
                       esActivo
-                        ? "border-[#4ADE80] bg-[#22C55E]"
+                        ? "border-[#FB923C] bg-[#3B82F6]"
                         : hecho
-                          ? "border-[#22C55E] bg-[#22C55E] text-[#0E2417]"
+                          ? "border-[#3B82F6] bg-[#3B82F6] text-[#0B1220]"
                           : "border-white/25"
                     }`}
                   >
@@ -115,7 +115,7 @@ export default function PanelMarca({ lema, entrada }: PanelMarcaProps) {
                       </svg>
                     )}
                     {esActivo && (
-                      <span className="absolute -inset-[5px] animate-ping rounded-full border-2 border-[#22C55E]" />
+                      <span className="absolute -inset-[5px] animate-ping rounded-full border-2 border-[#3B82F6]" />
                     )}
                   </span>
 

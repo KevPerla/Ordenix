@@ -218,6 +218,7 @@ patrón `main`, con estas casillas marcadas:
 |---|---|
 | `npm run start:dev` | Servidor en modo desarrollo |
 | `npm run build` | Compilación para producción |
+| `npm run lint` | Análisis estático |
 | `npm run typecheck` | Verificación de tipos |
 | `npm run db:init` | Aplica `database/schema.sql` a la base |
 | `npm run seed:admin` | Crea el administrador inicial |

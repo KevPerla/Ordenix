@@ -96,17 +96,18 @@ CREATE TABLE IF NOT EXISTS orders (
   repartidor_id UUID REFERENCES users (id) ON DELETE SET NULL,
   address_id    UUID NOT NULL REFERENCES addresses (id) ON DELETE RESTRICT,
   settlement_id UUID REFERENCES cash_settlements (id) ON DELETE SET NULL,
-  estado        VARCHAR(20) NOT NULL DEFAULT 'PENDIENTE',
+  estado        VARCHAR(20) NOT NULL DEFAULT 'CREADO',
   metodo_pago   VARCHAR(20) NOT NULL DEFAULT 'EFECTIVO',
   subtotal      NUMERIC(10, 2) NOT NULL CHECK (subtotal >= 0),
+  impuesto      NUMERIC(10, 2) NOT NULL DEFAULT 0 CHECK (impuesto >= 0),
   total         NUMERIC(10, 2) NOT NULL CHECK (total >= 0),
   notas         TEXT,
   created_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
 
   CONSTRAINT chk_orders_estado
-    CHECK (estado IN ('PENDIENTE', 'EN_PREPARACION', 'LISTO_DESPACHO',
-                      'EN_RUTA', 'ENTREGADO', 'CANCELADO')),
+    CHECK (estado IN ('CREADO', 'PAGADO', 'EN_PREPARACION',
+                      'EN_CAMINO', 'ENTREGADO', 'CANCELADO')),
   CONSTRAINT chk_orders_metodo_pago
     CHECK (metodo_pago IN ('EFECTIVO'))
 );

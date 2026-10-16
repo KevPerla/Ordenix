@@ -180,7 +180,7 @@ export default function HistorialRepartidor() {
       : "0.0";
 
   return (
-    <div className="min-h-screen bg-[#08090d] text-white">
+    <div className="min-h-screen bg-[#0B1220] text-white">
 
       <Sidebar role="repartidor" />
 
@@ -220,7 +220,7 @@ export default function HistorialRepartidor() {
 
           <section className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
 
-            <div className="rounded-3xl border border-white/[0.06] bg-[#0d0e13] p-6">
+            <div className="rounded-3xl border border-white/[0.06] bg-[#0B1220] p-6">
 
               <p className="text-[10px] uppercase tracking-wider text-slate-700">
                 Entregas
@@ -236,13 +236,13 @@ export default function HistorialRepartidor() {
 
             </div>
 
-            <div className="rounded-3xl border border-white/[0.06] bg-[#0d0e13] p-6">
+            <div className="rounded-3xl border border-white/[0.06] bg-[#0B1220] p-6">
 
               <p className="text-[10px] uppercase tracking-wider text-slate-700">
                 Ganancias
               </p>
 
-              <p className="mt-3 text-3xl font-bold text-emerald-400">
+              <p className="mt-3 text-3xl font-bold text-accent-400">
                 ${totalGanancias.toFixed(2)}
               </p>
 
@@ -252,7 +252,7 @@ export default function HistorialRepartidor() {
 
             </div>
 
-            <div className="rounded-3xl border border-white/[0.06] bg-[#0d0e13] p-6">
+            <div className="rounded-3xl border border-white/[0.06] bg-[#0B1220] p-6">
 
               <p className="text-[10px] uppercase tracking-wider text-slate-700">
                 Distancia
@@ -268,7 +268,7 @@ export default function HistorialRepartidor() {
 
             </div>
 
-            <div className="rounded-3xl border border-white/[0.06] bg-[#0d0e13] p-6">
+            <div className="rounded-3xl border border-white/[0.06] bg-[#0B1220] p-6">
 
               <p className="text-[10px] uppercase tracking-wider text-slate-700">
                 Calificación
@@ -288,7 +288,7 @@ export default function HistorialRepartidor() {
 
           {/* FILTROS */}
 
-          <section className="mt-8 rounded-3xl border border-white/[0.06] bg-[#0d0e13] p-5">
+          <section className="mt-8 rounded-3xl border border-white/[0.06] bg-[#0B1220] p-5">
 
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 
@@ -337,7 +337,7 @@ export default function HistorialRepartidor() {
 
           {/* TABLA */}
 
-          <section className="mt-6 overflow-hidden rounded-3xl border border-white/[0.06] bg-[#0d0e13]">
+          <section className="mt-6 overflow-hidden rounded-3xl border border-white/[0.06] bg-[#0B1220]">
 
             <div className="border-b border-white/[0.06] p-6">
 
@@ -384,7 +384,7 @@ export default function HistorialRepartidor() {
                       {entrega.id}
                     </p>
 
-                    <span className="mt-2 inline-block rounded-full bg-emerald-500/10 px-2 py-1 text-[8px] text-emerald-400">
+                    <span className="mt-2 inline-block rounded-full bg-brand-500/10 px-2 py-1 text-[8px] text-accent-400">
                       {entrega.estado}
                     </span>
 
@@ -446,7 +446,7 @@ export default function HistorialRepartidor() {
 
                   <div>
 
-                    <p className="text-xs font-semibold text-emerald-400">
+                    <p className="text-xs font-semibold text-accent-400">
                       +${entrega.ganancia.toFixed(2)}
                     </p>
 
@@ -571,7 +571,7 @@ export default function HistorialRepartidor() {
 
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-6 backdrop-blur-sm">
 
-          <div className="w-full max-w-lg overflow-hidden rounded-3xl border border-white/[0.08] bg-[#0d0e13] shadow-2xl">
+          <div className="w-full max-w-lg overflow-hidden rounded-3xl border border-white/[0.08] bg-[#0B1220] shadow-2xl">
 
             <div className="flex items-center justify-between border-b border-white/[0.06] p-6">
 
@@ -614,7 +614,7 @@ export default function HistorialRepartidor() {
 
                 </div>
 
-                <span className="rounded-full bg-emerald-500/10 px-3 py-1.5 text-[9px] text-emerald-400">
+                <span className="rounded-full bg-brand-500/10 px-3 py-1.5 text-[9px] text-accent-400">
                   ✓ Entregado
                 </span>
 
@@ -665,7 +665,7 @@ export default function HistorialRepartidor() {
 
               </div>
 
-              <div className="rounded-2xl border border-emerald-500/10 bg-emerald-500/[0.03] p-5">
+              <div className="rounded-2xl border border-brand-500/10 bg-brand-500/[0.03] p-5">
 
                 <div className="flex items-center justify-between">
 
@@ -675,7 +675,7 @@ export default function HistorialRepartidor() {
                       GANANCIA DE ESTA ENTREGA
                     </p>
 
-                    <p className="mt-2 text-2xl font-bold text-emerald-400">
+                    <p className="mt-2 text-2xl font-bold text-accent-400">
                       +$
                       {entregaSeleccionada.ganancia.toFixed(2)}
                     </p>

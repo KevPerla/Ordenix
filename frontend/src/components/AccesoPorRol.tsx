@@ -41,7 +41,7 @@ export default function AccesoPorRol() {
 
   if (estado === "verificando") {
     return (
-      <div className="h-[54px] animate-pulse rounded-2xl bg-[#EAF3EB]" />
+      <div className="h-[54px] animate-pulse rounded-2xl bg-[#EEF2F7]" />
     );
   }
 
@@ -57,9 +57,9 @@ export default function AccesoPorRol() {
   }
 
   return (
-    <section className="rounded-2xl border border-[#DCE8DE] bg-white px-4 py-3 shadow-sm shadow-green-900/[0.03]">
+    <section className="rounded-2xl border border-[#E2E8F0] bg-white px-4 py-3 shadow-sm shadow-ink-900/[0.03]">
       <div className="flex items-center gap-2">
-        <span className="grid h-[17px] w-[17px] shrink-0 place-items-center rounded-full bg-[#22C55E] text-white">
+        <span className="grid h-[17px] w-[17px] shrink-0 place-items-center rounded-full bg-[#3B82F6] text-white">
           <svg
             width="10"
             height="10"
@@ -75,13 +75,13 @@ export default function AccesoPorRol() {
           </svg>
         </span>
 
-        <p className="text-[13px] font-semibold text-[#172019]">
+        <p className="text-[13px] font-semibold text-[#0F172A]">
           Acceso de {ETIQUETA_ROL[usuario.rol].toLowerCase()} verificado
         </p>
       </div>
 
       {area && area.permisos.length > 0 && (
-        <p className="mt-1 pl-[25px] text-[12px] leading-relaxed text-[#8A968E]">
+        <p className="mt-1 pl-[25px] text-[12px] leading-relaxed text-[#94A3B8]">
           {area.permisos.join(" · ")}
         </p>
       )}
