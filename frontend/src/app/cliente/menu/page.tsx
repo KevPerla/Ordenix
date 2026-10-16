@@ -66,7 +66,7 @@ export default function ClienteMenuPage() {
         <EncabezadoPanel
           saludo="Catálogo"
           nombre="Qué vas a pedir"
-          descripcion="Cada producto muestra su precio sin IVA y con el 13% aplicado. Pagas en efectivo al recibir."
+          descripcion="Consulta precios con y sin IVA, filtra por categoría y arma tu pedido. Pagas en efectivo al recibir."
         />
 
         <div role="group" aria-label="Filtrar por categoría" className="flex flex-wrap gap-2">
@@ -166,6 +166,11 @@ export default function ClienteMenuPage() {
                         <button
                           type="button"
                           disabled={agotado}
+                          aria-label={
+                            agotado
+                              ? `${producto.nombre} sin existencias`
+                              : `Agregar ${producto.nombre} al carrito`
+                          }
                           onClick={() => carrito.agregar(producto)}
                           className={`${BOTON_PRIMARIO} w-full`}
                         >
