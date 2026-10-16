@@ -1,6 +1,6 @@
 import type { Repository } from 'typeorm';
 import { Categoria } from '../../domain/entities/categoria.entity';
-import type { CategoriaRepository } from '../../domain/repositories/categoria.repository.interface';
+import type { CategoriaRepository } from '../../application/ports/categoria.repository.port';
 import { CategoriaOrmEntity } from './categoria.orm-entity';
 import { ProductoOrmEntity } from './producto.orm-entity';
 

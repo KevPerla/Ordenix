@@ -1,5 +1,5 @@
 import type { Categoria } from '../../domain/entities/categoria.entity';
-import type { CategoriaRepository } from '../../domain/repositories/categoria.repository.interface';
+import type { CategoriaRepository } from '../ports/categoria.repository.port';
 import { CategoriaDuplicadaError } from '../errors/categoria-duplicada.error';
 import { CategoriaNoEncontradaError } from '../errors/categoria-no-encontrada.error';
 

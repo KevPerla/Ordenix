@@ -1,5 +1,5 @@
 import type { User } from '../../domain/entities/user.entity';
-import type { UserRepository } from '../../domain/repositories/user.repository.interface';
+import type { UserRepository } from '../ports/user.repository.port';
 import { CurrentUserUnavailableError } from '../errors/current-user-unavailable.error';
 
 export interface GetCurrentUserInput {

@@ -2,8 +2,8 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
-import { inicioDe } from "@/lib/rutas";
+import { useAuth } from "@/presentation/contexto/AuthContext";
+import { inicioDe } from "@/presentation/navegacion/rutas";
 
 export default function HomePage() {
   const router = useRouter();

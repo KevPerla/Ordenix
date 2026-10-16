@@ -1,6 +1,6 @@
 import { User } from '../../domain/entities/user.entity';
 import { UserRole } from '../../domain/enums/user-role.enum';
-import type { UserRepository } from '../../domain/repositories/user.repository.interface';
+import type { UserRepository } from '../ports/user.repository.port';
 import { EmailAlreadyExistsError } from '../errors/email-already-exists.error';
 import type { IdGenerator } from '../ports/id-generator.port';
 import type { PasswordHasher } from '../ports/password-hasher.port';

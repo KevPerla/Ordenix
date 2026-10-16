@@ -1,5 +1,5 @@
 import type { User } from '../../domain/entities/user.entity';
-import type { UserRepository } from '../../domain/repositories/user.repository.interface';
+import type { UserRepository } from '../ports/user.repository.port';
 import { InvalidCredentialsError } from '../errors/invalid-credentials.error';
 import type { PasswordHasher } from '../ports/password-hasher.port';
 import type { TokenService } from '../ports/token-service.port';
