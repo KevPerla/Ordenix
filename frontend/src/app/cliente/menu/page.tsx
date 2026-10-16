@@ -166,6 +166,11 @@ export default function ClienteMenuPage() {
                         <button
                           type="button"
                           disabled={agotado}
+                          aria-label={
+                            agotado
+                              ? `${producto.nombre} sin existencias`
+                              : `Agregar ${producto.nombre} al carrito`
+                          }
                           onClick={() => carrito.agregar(producto)}
                           className={`${BOTON_PRIMARIO} w-full`}
                         >
