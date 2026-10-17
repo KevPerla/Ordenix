@@ -399,6 +399,7 @@ export default function EmpresaProductosPage() {
                         <div className="flex justify-end gap-1.5">
                           <button
                             type="button"
+                            aria-label={`Editar ${producto.nombre}`}
                             onClick={() => abrirEdicion(producto)}
                             className={BOTON_COMPACTO}
                           >
@@ -406,6 +407,7 @@ export default function EmpresaProductosPage() {
                           </button>
                           <button
                             type="button"
+                            aria-label={`Eliminar ${producto.nombre}`}
                             onClick={() => setPorEliminar(producto)}
                             className={BOTON_COMPACTO_PELIGRO}
                           >
