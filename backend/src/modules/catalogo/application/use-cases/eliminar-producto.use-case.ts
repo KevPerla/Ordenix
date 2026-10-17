@@ -1,4 +1,4 @@
-import type { ProductoRepository } from '../../domain/repositories/producto.repository.interface';
+import type { ProductoRepository } from '../ports/producto.repository.port';
 import { ProductoEnUsoError } from '../errors/producto-en-uso.error';
 import { ProductoNoEncontradoError } from '../errors/producto-no-encontrado.error';
 

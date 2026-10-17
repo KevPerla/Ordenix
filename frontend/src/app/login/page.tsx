@@ -3,12 +3,13 @@
 import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import CampoAuth from "@/components/CampoAuth";
-import PanelMarca from "@/components/PanelMarca";
-import { useAuth } from "@/context/AuthContext";
-import { useAviso } from "@/context/AvisoContext";
-import { login } from "@/lib/api";
-import { inicioDe } from "@/lib/rutas";
+import CampoAuth from "@/presentation/components/CampoAuth";
+import PanelMarca from "@/presentation/components/PanelMarca";
+import { mensajeDeError } from "@/application/errores";
+import { primerNombre } from "@/domain/usuario";
+import { useAuth } from "@/presentation/contexto/AuthContext";
+import { useAviso } from "@/presentation/contexto/AvisoContext";
+import { inicioDe } from "@/presentation/navegacion/rutas";
 
 const ICONO_CORREO = (
   <svg
@@ -67,20 +68,12 @@ export default function LoginPage() {
     setCargando(true);
 
     try {
-      const { accessToken, user } = await login({
-        correo: correo.trim(),
-        password,
-      });
+      const sesion = await iniciarSesion({ correo, password });
 
-      iniciarSesion(user, accessToken);
-      mostrarAviso(`Bienvenido, ${user.nombre.split(" ")[0]}`);
-      router.replace(inicioDe(user.rol));
+      mostrarAviso(`Bienvenido, ${primerNombre(sesion)}`);
+      router.replace(inicioDe(sesion.rol));
     } catch (error: unknown) {
-      setError(
-        error instanceof Error
-          ? error.message
-          : "No se pudo iniciar sesión"
-      );
+      setError(mensajeDeError(error, "No se pudo iniciar sesión"));
       setCargando(false);
     }
   };

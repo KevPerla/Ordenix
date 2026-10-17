@@ -1,129 +1,124 @@
 "use client";
 
 import Link from "next/link";
-import AccesoPorRol from "@/components/AccesoPorRol";
-import PanelShell from "@/components/PanelShell";
-import EncabezadoPanel from "@/components/panel/EncabezadoPanel";
-import EstadoVacio from "@/components/panel/EstadoVacio";
-import Metrica from "@/components/panel/Metrica";
-import Tarjeta from "@/components/panel/Tarjeta";
+import { totalVendido } from "@/domain/pedido";
+import { primerNombre } from "@/domain/usuario";
+import { pedidos } from "@/infrastructure/contenedor";
+import AccesoPorRol from "@/presentation/components/AccesoPorRol";
+import PanelShell from "@/presentation/components/PanelShell";
+import EncabezadoPanel from "@/presentation/components/panel/EncabezadoPanel";
+import EstadoVacio from "@/presentation/components/panel/EstadoVacio";
+import Metrica from "@/presentation/components/panel/Metrica";
+import Tarjeta from "@/presentation/components/panel/Tarjeta";
+import { BOTON_PRIMARIO } from "@/presentation/components/panel/estilos";
 import {
   IconoDinero,
-  IconoEstrella,
+  IconoFlecha,
   IconoMoto,
   IconoReloj,
   IconoRuta,
-} from "@/components/panel/iconos";
-import { useAuth } from "@/context/AuthContext";
+} from "@/presentation/components/panel/iconos";
+import ListaPedidos from "@/presentation/components/pedido/ListaPedidos";
+import { useAuth } from "@/presentation/contexto/AuthContext";
+import { esMismoDia } from "@/presentation/formato/fechas";
+import { formatearMoneda } from "@/presentation/formato/moneda";
+import { useConsulta } from "@/presentation/hooks/useConsulta";
 
 const TURNO = [
-  {
-    titulo: "Toma una entrega",
-    detalle: "Las disponibles de tu zona aparecen en la lista.",
-  },
-  {
-    titulo: "Marca el avance",
-    detalle: "Cambia el estado a en camino cuando salgas del local.",
-  },
-  {
-    titulo: "Confirma la entrega",
-    detalle: "El cliente ve el cambio en el momento en que lo marcas.",
-  },
-  {
-    titulo: "Liquida el efectivo",
-    detalle: "Al cerrar turno cuadras lo cobrado con lo entregado.",
-  },
+  { titulo: "Toma una entrega", detalle: "Los pedidos en preparación aparecen como listos para salir." },
+  { titulo: "Sal a entregar", detalle: "El pedido queda a tu nombre y el cliente lo ve en camino." },
+  { titulo: "Confirma la entrega", detalle: "Cobra el total en efectivo y márcalo como entregado." },
 ];
+
+async function cargarTurno() {
+  const lista = await pedidos.listar();
+  const ahora = new Date();
+  const entregadosHoy = lista.filter(
+    (pedido) => pedido.estado === "ENTREGADO" && esMismoDia(pedido.updatedAt, ahora),
+  );
+
+  return {
+    enRuta: lista.filter((pedido) => pedido.estado === "EN_CAMINO"),
+    listos: lista.filter((pedido) => pedido.estado === "EN_PREPARACION").length,
+    entregadosHoy: entregadosHoy.length,
+    efectivoHoy: totalVendido(entregadosHoy),
+  };
+}
 
 export default function RepartidorPage() {
   const { usuario } = useAuth();
-  const primerNombre = usuario?.nombre?.split(" ")[0];
+  const nombre = primerNombre(usuario);
+  const { datos, cargando } = useConsulta(cargarTurno, [], { refrescarCadaMs: 15_000 });
+
+  const valor = (texto: string | number | undefined) =>
+    cargando || texto === undefined ? "—" : String(texto);
 
   return (
     <PanelShell area="repartidor" titulo="Inicio">
       <div className="space-y-6">
         <EncabezadoPanel
           saludo="Hola"
-          nombre={primerNombre ? `Hola, ${primerNombre}` : "Panel de reparto"}
-          descripcion="Tomas las entregas de tu zona, marcas cada avance y cierras el turno con el efectivo cuadrado."
+          nombre={nombre ? `Hola, ${nombre}` : "Panel de reparto"}
+          descripcion="Tomas los pedidos listos, marcas cada avance y cierras el turno con el efectivo cuadrado."
           accion={
-            <Link
-              href="/repartidor/disponibles"
-              className="presionable inline-flex h-11 items-center gap-2 rounded-[var(--radius-control)] bg-brand-700 px-5 text-[14px] font-bold text-white shadow-[var(--sombra-media)] hover:bg-brand-800"
-            >
-              Ver disponibles
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M5 12h14" />
-                <path d="m13 6 6 6-6 6" />
-              </svg>
+            <Link href="/repartidor/pedidos" className={BOTON_PRIMARIO}>
+              Ver entregas
+              {IconoFlecha}
             </Link>
           }
         />
 
         <AccesoPorRol />
 
-        <section
-          aria-label="Resumen del turno"
-          className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"
-        >
+        <section aria-label="Resumen del turno" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <Metrica
-            etiqueta="En curso"
-            valor="0"
-            detalle="Ninguna entrega asignada"
+            etiqueta="En ruta"
+            valor={valor(datos?.enRuta.length)}
+            detalle="Pedidos que llevas ahora"
             icono={IconoMoto}
             tono="marca"
           />
           <Metrica
-            etiqueta="Entregadas hoy"
-            valor="0"
-            detalle="El turno acaba de empezar"
+            etiqueta="Listos para salir"
+            valor={valor(datos?.listos)}
+            detalle="Esperando repartidor"
+            icono={IconoReloj}
+            tono="alerta"
+          />
+          <Metrica
+            etiqueta="Entregados hoy"
+            valor={valor(datos?.entregadosHoy)}
+            detalle="Cerrados en tu turno"
             icono={IconoRuta}
             tono="exito"
           />
           <Metrica
-            etiqueta="Por liquidar"
-            valor="$0.00"
-            detalle="Efectivo cobrado pendiente"
+            etiqueta="Efectivo cobrado"
+            valor={valor(datos && formatearMoneda(datos.efectivoHoy))}
+            detalle="Total de las entregas de hoy"
             icono={IconoDinero}
-            tono="alerta"
-          />
-          <Metrica
-            etiqueta="Calificación"
-            valor="—"
-            detalle="Sin entregas calificadas"
-            icono={IconoEstrella}
             tono="neutro"
           />
         </section>
 
         <div className="grid gap-6 xl:grid-cols-[1.4fr_1fr]">
-          <Tarjeta
-            titulo="Entregas asignadas"
-            descripcion="Lo que tienes en ruta ahora"
-          >
-            <EstadoVacio
-              icono={IconoReloj}
-              titulo="No tienes entregas asignadas"
-              descripcion="Cuando tomes una entrega disponible vas a ver aquí la dirección, el detalle del pedido y el monto a cobrar."
-              accion={
-                <Link
-                  href="/repartidor/disponibles"
-                  className="presionable inline-flex h-10 items-center rounded-[var(--radius-control)] bg-brand-700 px-4 text-[13.5px] font-bold text-white shadow-[var(--sombra-baja)] hover:bg-brand-800"
-                >
-                  Buscar entregas
-                </Link>
-              }
-            />
+          <Tarjeta titulo="En ruta" descripcion="Lo que tienes asignado ahora">
+            {cargando ? (
+              <div className="esqueleto m-5 h-32 rounded-xl" />
+            ) : datos && datos.enRuta.length > 0 ? (
+              <ListaPedidos pedidos={datos.enRuta} enlace={() => "/repartidor/pedidos"} />
+            ) : (
+              <EstadoVacio
+                icono={IconoReloj}
+                titulo="No tienes entregas asignadas"
+                descripcion="Cuando tomes un pedido listo verás aquí la dirección, el detalle y el monto a cobrar."
+                accion={
+                  <Link href="/repartidor/pedidos" className={BOTON_PRIMARIO}>
+                    Buscar entregas
+                  </Link>
+                }
+              />
+            )}
           </Tarjeta>
 
           <Tarjeta titulo="Tu turno" descripcion="El flujo de cada entrega">
@@ -133,7 +128,6 @@ export default function RepartidorPage() {
                   <span className="numero-tabular grid h-6 w-6 shrink-0 place-items-center rounded-full bg-brand-50 text-[12px] font-bold text-brand-700">
                     {indice + 1}
                   </span>
-
                   <span className="min-w-0">
                     <span className="block text-[13.5px] font-bold text-ink-900">
                       {paso.titulo}

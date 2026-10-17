@@ -3,7 +3,7 @@ import { Producto } from '../../domain/entities/producto.entity';
 import type {
   FiltroProductos,
   ProductoRepository,
-} from '../../domain/repositories/producto.repository.interface';
+} from '../../application/ports/producto.repository.port';
 import { ProductoOrmEntity } from './producto.orm-entity';
 
 interface ConteoFila {

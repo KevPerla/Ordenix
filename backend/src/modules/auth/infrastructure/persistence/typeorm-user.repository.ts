@@ -1,7 +1,7 @@
 import { QueryFailedError, type Repository } from 'typeorm';
 import { EmailAlreadyExistsError } from '../../application/errors/email-already-exists.error';
 import { User } from '../../domain/entities/user.entity';
-import type { UserRepository } from '../../domain/repositories/user.repository.interface';
+import type { UserRepository } from '../../application/ports/user.repository.port';
 import { UserOrmEntity } from './user.orm-entity';
 
 const POSTGRES_UNIQUE_VIOLATION_CODE = '23505';

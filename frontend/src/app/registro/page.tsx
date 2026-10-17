@@ -3,12 +3,12 @@
 import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import CampoAuth from "@/components/CampoAuth";
-import PanelMarca from "@/components/PanelMarca";
-import { useAuth } from "@/context/AuthContext";
-import { useAviso } from "@/context/AvisoContext";
-import { login, register } from "@/lib/api";
-import { inicioDe } from "@/lib/rutas";
+import CampoAuth from "@/presentation/components/CampoAuth";
+import PanelMarca from "@/presentation/components/PanelMarca";
+import { mensajeDeError } from "@/application/errores";
+import { useAuth } from "@/presentation/contexto/AuthContext";
+import { useAviso } from "@/presentation/contexto/AvisoContext";
+import { inicioDe } from "@/presentation/navegacion/rutas";
 
 type Campo =
   | "nombreCompleto"
@@ -271,7 +271,7 @@ function Requisitos({ valor }: { valor: string }) {
 
 export default function RegistroPage() {
   const router = useRouter();
-  const { usuario, cargandoSesion, iniciarSesion } = useAuth();
+  const { usuario, cargandoSesion, registrarse } = useAuth();
   const { mostrarAviso } = useAviso();
 
   const [valores, setValores] = useState<Formulario>(VACIO);
@@ -318,27 +318,17 @@ export default function RegistroPage() {
     setCargando(true);
 
     try {
-      await register({
-        nombreCompleto: valores.nombreCompleto.trim(),
-        correo: valores.correo.trim(),
-        telefono: valores.telefono.trim(),
+      const nuevo = await registrarse({
+        nombreCompleto: valores.nombreCompleto,
+        correo: valores.correo,
+        telefono: valores.telefono,
         password: valores.password,
       });
 
-      const { accessToken, user } = await login({
-        correo: valores.correo.trim(),
-        password: valores.password,
-      });
-
-      iniciarSesion(user, accessToken);
       mostrarAviso("Cuenta creada exitosamente");
-      router.replace(inicioDe(user.rol));
+      router.replace(inicioDe(nuevo.rol));
     } catch (error: unknown) {
-      setError(
-        error instanceof Error
-          ? error.message
-          : "No se pudo crear la cuenta"
-      );
+      setError(mensajeDeError(error, "No se pudo crear la cuenta"));
       setCargando(false);
     }
   };

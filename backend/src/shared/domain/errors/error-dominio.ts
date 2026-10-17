@@ -1,4 +1,8 @@
-export type CategoriaError = 'DOMINIO' | 'CONFLICTO' | 'NO_ENCONTRADO';
+export type CategoriaError =
+  | 'DOMINIO'
+  | 'CONFLICTO'
+  | 'NO_ENCONTRADO'
+  | 'PROHIBIDO';
 
 export abstract class ErrorDominio extends Error {
   abstract readonly codigo: string;
@@ -23,4 +27,8 @@ export abstract class ErrorConflicto extends ErrorDominio {
 
 export abstract class ErrorNoEncontrado extends ErrorDominio {
   readonly categoria = 'NO_ENCONTRADO' as const;
+}
+
+export abstract class ErrorProhibido extends ErrorDominio {
+  readonly categoria = 'PROHIBIDO' as const;
 }

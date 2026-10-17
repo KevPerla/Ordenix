@@ -17,6 +17,7 @@ const ESTADO_POR_CATEGORIA: Record<CategoriaError, number> = {
   DOMINIO: HttpStatus.BAD_REQUEST,
   CONFLICTO: HttpStatus.CONFLICT,
   NO_ENCONTRADO: HttpStatus.NOT_FOUND,
+  PROHIBIDO: HttpStatus.FORBIDDEN,
 };
 
 const CODIGO_POR_ESTADO: Record<number, string> = {
@@ -109,7 +110,7 @@ export class ExcepcionGlobalFilter implements ExceptionFilter {
 
       return {
         estado,
-        tipo: 'DOMINIO',
+        tipo: tipoSegunEstado(estado),
         codigo: excepcion.codigo,
         mensaje: excepcion.message,
         detalles: excepcion.detalles,

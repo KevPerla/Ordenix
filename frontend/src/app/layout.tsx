@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "@/context/AuthContext";
-import { AvisoProvider } from "@/context/AvisoContext";
+import { AuthProvider } from "@/presentation/contexto/AuthContext";
+import { AvisoProvider } from "@/presentation/contexto/AvisoContext";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],

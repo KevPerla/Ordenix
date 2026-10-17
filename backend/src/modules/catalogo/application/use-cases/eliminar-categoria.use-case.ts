@@ -1,4 +1,4 @@
-import type { CategoriaRepository } from '../../domain/repositories/categoria.repository.interface';
+import type { CategoriaRepository } from '../ports/categoria.repository.port';
 import { CategoriaConProductosError } from '../errors/categoria-con-productos.error';
 import { CategoriaNoEncontradaError } from '../errors/categoria-no-encontrada.error';
 

@@ -2,7 +2,7 @@ import type { Producto } from '../../domain/entities/producto.entity';
 import type {
   FiltroProductos,
   ProductoRepository,
-} from '../../domain/repositories/producto.repository.interface';
+} from '../ports/producto.repository.port';
 
 export class ListarProductosUseCase {
   constructor(private readonly repositorio: ProductoRepository) {}
