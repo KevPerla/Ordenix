@@ -4,8 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './modules/auth/auth.module';
 import { CatalogoModule } from './modules/catalogo/catalogo.module';
 import { PedidosModule } from './modules/pedidos/pedidos.module';
-import { HealthController } from './shared/adapters/controllers/health.controller';
-import { createDatabaseConfig } from './shared/infrastructure/database/database.config';
+
 
 @Module({
   imports: [
